@@ -1,0 +1,3 @@
+displayName = Marvel Heroes
+author = RateMyPsyduck
+version = 0.1
