@@ -172,15 +172,18 @@ namespace ATB.Items
 					if(Collision.CheckAABBvLineCollision(Main.npc[i].getRect().Center(), Main.npc[i].getRect().Size(), player.Center, player.Center + Projectile.velocity * Distance, 22, ref point) && Main.npc[i].active == true){
 						Flag = true;
 						// Main.NewText("Colliding with: " + Main.npc[i].ToString(), 150, 250, 0);
-						Main.NewText(Projectile.velocity.ToString(), 150, 0, 0);
+						// Main.NewText(Projectile.velocity.ToString(), 150, 0, 0);
+						// Main.NewText(Main.npc[i].FullName, 150, 0, 0);
 						break;
 					}
 				}
-				if (!Collision.CanHit(player.Center, 1, 1, start, 1, 1) || Flag == true) {
+				if (!Collision.CanHitLine(player.Center, 1, 1, start, 1, 1) || Flag == true) {
 					Distance += 20f;
-                    // Main.NewText(Distance.ToString(), 150, 250, 150);
-                    // Main.NewText(player.Center.ToString(), 0, 250, 150);
-                    Main.NewText(Projectile.velocity.ToString(), 150, 0, 0);
+					//GivenName
+					//Main.NewText(Main.npc[i].FullName, 150, 0, 0);
+                    Main.NewText(Projectile.velocity.ToString(), 150, 250, 150);
+                    Main.NewText(start.ToString(), 0, 250, 150);
+                    //Main.NewText(Projectile.velocity.ToString(), 150, 0, 0);
 					break;
 				}
                 else{
