@@ -15,7 +15,9 @@ namespace ATB.Items
     class PhaserBeam:ModProjectile
 	{
 		bool NCPFLAG = false;
-		int Timer = 0;
+		public int Timer;
+		bool TimerTrig = false;
+		bool TimerFin = false;
 		// Use a different style for constant so it is very clear in code when a constant is used
 
 		// The maximum charge value
@@ -44,7 +46,7 @@ namespace ATB.Items
 			Projectile.height = 2;
 			Projectile.friendly = true;
 			Projectile.penetrate = -1;
-			Projectile.tileCollide = false;
+			Projectile.tileCollide = true;
 			Projectile.hide = true;
             Projectile.scale = 0.3f;
 		}
@@ -125,6 +127,41 @@ namespace ATB.Items
 			CastLights();
 		}
 
+	    public override bool OnTileCollide(Vector2 velocityChange)  //On Contact do an action
+        {
+            //Nums for producing the radius of the effect, this setting should work for at least one tile to be destroyed
+            // int num101 = (int)(Projectile.position.X / 16f) - 2;
+            // int num102 = (int)((Projectile.position.X + (float)1) / 16f) + 1;
+            // int num103 = (int)(Projectile.position.Y / 16f) - 2;
+            // int num104 = (int)((Projectile.position.Y + (float)1) / 16f) + 1;
+            // if (num101 < 0)
+            // {
+            //     num101 = 0;
+            // }
+            // if (num102 > Main.maxTilesX)
+            // {
+            //     num102 = Main.maxTilesX;
+            // }
+            // if (num103 < 0)
+            // {
+            //     num103 = 0;
+            // }
+            // if (num104 > Main.maxTilesY)
+            // {
+            //     num104 = Main.maxTilesY;
+            // }
+
+            // //Searches at the radius
+            // for (int num105 = num101; num105 < num102; num105++)
+            // {
+            //     for (int num106 = num103; num106 < num104; num106++)
+            //     {
+            //         WorldGen.KillTile(num105, num106, false, false, false); //kills tiles
+            //     }
+            // }
+            return false; //Makes sure the projectile dies on tile collide.
+        }
+
 		private void SpawnDusts(Player player) {
 			Vector2 tempVel = Projectile.velocity;
 			Vector2 unit = Projectile.velocity * -1;
@@ -182,8 +219,41 @@ namespace ATB.Items
 					//GivenName
 					//Main.NewText(Main.npc[i].FullName, 150, 0, 0);
                     Main.NewText(Projectile.velocity.ToString(), 150, 250, 150);
-                    Main.NewText(start.ToString(), 0, 250, 150);
+                    //Main.NewText(start.ToString(), 0, 250, 150);
                     //Main.NewText(Projectile.velocity.ToString(), 150, 0, 0);
+					int num101 = (int)((player.Center + Projectile.velocity * Distance).X / 16f) - 2;
+					int num102 = (int)(((player.Center + Projectile.velocity * Distance).X + (float)1) / 16f) + 1;
+					int num103 = (int)((player.Center + Projectile.velocity * Distance).Y / 16f) - 2;
+					int num104 = (int)(((player.Center + Projectile.velocity * Distance).Y + (float)1) / 16f) + 1;
+					if (num101 < 0)
+					{
+						num101 = 0;
+					}
+					if (num102 > Main.maxTilesX)
+					{
+						num102 = Main.maxTilesX;
+					}
+					if (num103 < 0)
+					{
+						num103 = 0;
+					}
+					if (num104 > Main.maxTilesY)
+					{
+						num104 = Main.maxTilesY;
+					}
+
+					//Searches at the radius
+					for (int num105 = num101; num105 < num102; num105++)
+					{
+						for (int num106 = num103; num106 < num104; num106++)
+						{
+							Timer++;
+							if(Timer > 50){
+								WorldGen.KillTile(num105, num106, false, false, false); //kills tiles
+								Timer = 0;
+							}
+						}
+					}
 					break;
 				}
                 else{
