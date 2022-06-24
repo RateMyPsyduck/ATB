@@ -102,7 +102,7 @@ namespace ATB.Items
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit) {
 			target.immune[Projectile.owner] = 10;
 			NCPFLAG = true;
-			target.AddBuff(ModContent.BuffType<Stun>(), (5 * 60));
+			//target.AddBuff(ModContent.BuffType<Stun>(), (5 * 60));
 		}
 
 		// The AI of the Projectile

@@ -1,12 +1,22 @@
+using System;
 using Terraria;
+using Terraria.Enums;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.Audio;
+using Terraria.GameContent;
+using ReLogic.Content;
+using ReLogic.Content;
+
 using static Terraria.ModLoader.ModContent;
 
 namespace ATB.Items
 {
     class Phaser:ModItem
 	{
+		public int proj = 0;
 		public override void SetStaticDefaults() {
 			Tooltip.SetDefault("Shoot a laser beam that can eliminate anything...");
 		}
@@ -27,6 +37,28 @@ namespace ATB.Items
 			Item.shoot = ProjectileType<PhaserBeam>();
 			Item.value = Item.sellPrice(silver: 3);
 		}
+
+		public override bool AltFunctionUse(Player player) {
+			return true;
+		}
+
+		public override bool? UseItem(Player player) {
+			proj++;
+			if(proj > 1){
+				proj = 0;
+			}
+			return false;
+		}
+
+		public override void ModifyShootStats (Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback){
+			if(proj == 0){
+				type = ProjectileType<PhaserBeam>();
+			}
+			else if(proj == 1){
+				type = ProjectileType<PhaserStun>();
+			}
+		}
+
 		public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
