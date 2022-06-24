@@ -102,6 +102,7 @@ namespace ATB.Items
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit) {
 			target.immune[Projectile.owner] = 10;
 			NCPFLAG = true;
+			target.AddBuff(ModContent.BuffType<Stun>(), (5 * 60));
 		}
 
 		// The AI of the Projectile
@@ -218,7 +219,7 @@ namespace ATB.Items
 					Distance += 20f;
 					//GivenName
 					//Main.NewText(Main.npc[i].FullName, 150, 0, 0);
-                    Main.NewText(Projectile.velocity.ToString(), 150, 250, 150);
+                    //Main.NewText(Projectile.velocity.ToString(), 150, 250, 150);
                     //Main.NewText(start.ToString(), 0, 250, 150);
                     //Main.NewText(Projectile.velocity.ToString(), 150, 0, 0);
 					int num101 = (int)((player.Center + Projectile.velocity * Distance).X / 16f) - 2;
@@ -257,7 +258,7 @@ namespace ATB.Items
 					break;
 				}
                 else{
-                    Main.NewText("Not Colliding", 150, 0, 0);
+                    //Main.NewText("Not Colliding", 150, 0, 0);
                 }
 			}
 		}
