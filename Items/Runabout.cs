@@ -1,6 +1,7 @@
 // using ExampleMod.Content.Items;
 // using ExampleMod.Content.Tiles.Furniture;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.DataStructures;
@@ -130,6 +131,8 @@ namespace ATB.Items
 			Projectile.DamageType = DamageClass.Summon; // Declares the damage type (needed for it to deal damage)
 			Projectile.minionSlots = 1f; // Amount of slots this minion occupies from the total minion slots available to the player (more on that later)
 			Projectile.penetrate = -1; // Needed so the minion doesn't despawn on collision with enemies or tiles
+            Projectile.manualDirectionChange = true;
+            Projectile.direction = -1;
 		}
 
 		// Here you can decide if your minion breaks things like grass or pots
@@ -277,6 +280,12 @@ namespace ATB.Items
 				// Minion has a target: attack (here, fly towards the enemy)
 				if (distanceFromTarget > 40f) {
 					// The immediate range around the target (so it doesn't latch onto it when close)
+                    if(targetCenter.X < Projectile.Center.X){
+                        Projectile.spriteDirection = -1;
+                    }
+                    else{
+                        Projectile.spriteDirection = 1;
+                    }
 					Vector2 direction = targetCenter - Projectile.Center;
 					direction.Normalize();
 					direction *= speed;
@@ -334,5 +343,15 @@ namespace ATB.Items
 			// Some visuals here
 			Lighting.AddLight(Projectile.Center, Color.White.ToVector3() * 0.78f);
 		}
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            SpriteEffects spriteEffects = SpriteEffects.None;
+            if (Projectile.spriteDirection == 1)
+            {
+                spriteEffects = SpriteEffects.FlipHorizontally;
+            }
+            return true;
+        }
 	}
 }
