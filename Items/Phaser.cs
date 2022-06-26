@@ -36,6 +36,7 @@ namespace ATB.Items
 			Item.useAnimation = 20;
 			Item.shoot = ProjectileType<PhaserBeam>();
 			Item.value = Item.sellPrice(silver: 3);
+			Item.scale = 0.8f;
 		}
 
 		public override bool AltFunctionUse(Player player) {
