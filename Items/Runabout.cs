@@ -8,6 +8,11 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.Enums;
+using Terraria.Audio;
+using Terraria.GameContent;
+using ReLogic.Content;
+using ReLogic.Content;
 
 namespace ATB.Items
 {
@@ -291,6 +296,33 @@ namespace ATB.Items
 					direction *= speed;
 
 					Projectile.velocity = (Projectile.velocity * (inertia - 1) + direction) / inertia;
+						// if ((targetCenter.X - Projectile.Center).X > 0f) {
+						// 	projectile.spriteDirection = projectile.direction = -1;
+						// }
+						// else if ((targetPos - projectile.Center).X < 0f) {
+						// 	projectile.spriteDirection = projectile.direction = 1;
+						// }
+						if (true) {
+							if (Main.myPlayer == Projectile.owner) {
+								Vector2 shootVel = targetCenter - Projectile.Center;
+								if (shootVel == Vector2.Zero) {
+									shootVel = new Vector2(0f, 1f);
+								}
+								shootVel.Normalize();
+								shootVel *= 50f;
+								float xMark;
+								if(Projectile.spriteDirection == -1){
+									xMark = Projectile.Center.X - 47;
+								}
+								else{
+									xMark = Projectile.Center.X + 47;
+								}
+								int proj = Projectile.NewProjectile(null, xMark, Projectile.Center.Y + 18, shootVel.X, shootVel.Y, 100, Projectile.damage, Projectile.knockBack, Main.myPlayer, 0f, 0f);
+								Main.projectile[proj].timeLeft = 300;
+								Main.projectile[proj].netUpdate = true;
+								Projectile.netUpdate = true;
+							}
+					}
 				}
 			}
 			else {
