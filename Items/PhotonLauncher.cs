@@ -87,8 +87,8 @@ namespace ATB.Items
 		public override Vector2? HoldoutOffset()
         {
 			Vector2 g;
-            g.Y = 0;
-            g.X = 10;
+            g.Y = -1;
+            g.X = -3;
 			return g;
 
         }
