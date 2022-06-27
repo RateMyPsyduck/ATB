@@ -1,14 +1,18 @@
-using System;
-using Terraria;
-using Terraria.Enums;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
+using Terraria;
 using Terraria.ID;
+using Terraria.GameContent.Creative;
 using Terraria.ModLoader;
 using Terraria.Audio;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
-using ReLogic.Content;
-using ReLogic.Content;
+using Terraria.GameInput;
+using Terraria.Map;
+using Terraria.DataStructures;
+using System;
+using System.Windows.Input;
 
 using static Terraria.ModLoader.ModContent;
 
@@ -16,6 +20,8 @@ namespace ATB.Items
 {
     class PhotonLauncher:ModItem
 	{
+		int[] timers = {0,0,0,0};
+		//SoundStyle Pew = new SoundStyle($"{nameof(ATB)}/Items/PhotonLaunch");
 		public int proj = 0;
 		public override void SetStaticDefaults() {
 			Tooltip.SetDefault("The power of the sun in the palm of my hand!");
@@ -38,11 +44,7 @@ namespace ATB.Items
 			Item.shoot = ProjectileType<Photon>();
 			Item.value = Item.sellPrice(gold: 11);
 			Item.scale = 1f;
-			Item.UseSound = new SoundStyle($"{nameof(ATB)}/Items/PhotonLaunch") {
-				Volume = 0.9f,
-				PitchVariance = 2f,
-				MaxInstances = 3,
-			};
+			Item.UseSound = null;
 		}
 
 		public override bool AltFunctionUse(Player player) {
@@ -56,5 +58,40 @@ namespace ATB.Items
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.Register();
 		}
+
+		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback){
+			bool set = false;
+			for(int i = 0; i < 4; i++){
+				if(timers[i] == 0){
+					timers[i]++;
+					SoundEngine.PlaySound(new SoundStyle($"{nameof(ATB)}/Items/PhotonLaunch"), player.position);
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public override void UpdateInventory (Player player){
+			for(int i = 0; i < 4; i++){
+				if(timers[i] > 450){
+					timers[i] = 0;
+					SoundEngine.PlaySound(new SoundStyle($"{nameof(ATB)}/Items/PhotonReboot"), player.position);
+					Dust.NewDust(player.Center, player.width, player.height, DustID.MagicMirror, 0f, 0f, 150, Color.Red, 1.3f);
+				}
+				if(timers[i] > 0){
+					timers[i]++;
+				}
+			}
+		}
+
+		public override Vector2? HoldoutOffset()
+        {
+			Vector2 g;
+            g.Y = 0;
+            g.X = 10;
+			return g;
+
+        }
+
 	}
 }
