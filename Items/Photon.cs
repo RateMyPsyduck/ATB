@@ -27,7 +27,7 @@ namespace ATB.Items
 			Projectile.hostile = false; // Can the projectile deal damage to the player?
 			Projectile.ignoreWater = true; // Does the projectile's speed be influenced by water?
 			Projectile.light = 1f; // How much light emit around the projectile
-			Projectile.tileCollide = false; // Can the projectile collide with tiles?
+			Projectile.tileCollide = true; // Can the projectile collide with tiles?
 			Projectile.timeLeft = 1200; // The live time for the projectile (60 = 1 second, so 600 is 10 seconds)
 		}
 
@@ -79,5 +79,21 @@ namespace ATB.Items
 
 			return closestNPC;
 		}
+
+        public override void Kill(int timeLeft){
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y, 0, 0, 696, Projectile.damage, Projectile.knockBack * 50, Main.myPlayer, 0f, 0f);
+			// Main.projectile[proj].timeLeft = 30;
+			// Main.projectile[proj].netUpdate = true;
+			//Projectile.netUpdate = true;
+        }
+
+        // public bool OnTileCollide(Vector2 oldVelocity){
+        //     Main.NewText("COLLIDE", 150, 0, 0);
+        //     Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y, 1, 1, 5, Projectile.damage, Projectile.knockBack * 50, Main.myPlayer, 0f, 0f);
+		// 	// Main.projectile[proj].timeLeft = 30;
+		// 	// Main.projectile[proj].netUpdate = true;
+		// 	// Projectile.netUpdate = true;
+        //     return true;
+        // }
 	}
 }

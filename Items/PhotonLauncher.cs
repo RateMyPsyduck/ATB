@@ -33,11 +33,16 @@ namespace ATB.Items
 			Item.useTime = 20;
 			Item.UseSound = SoundID.Item13;
 			Item.useStyle = 5;
-			Item.shootSpeed = 3f;
+			Item.shootSpeed = 8f;
 			Item.useAnimation = 20;
 			Item.shoot = ProjectileType<Photon>();
 			Item.value = Item.sellPrice(silver: 3);
-			Item.scale = 0.8f;
+			Item.scale = 1f;
+			Item.UseSound = new SoundStyle($"{nameof(ATB)}/Items/PhotonLaunch") {
+				Volume = 0.9f,
+				PitchVariance = 2f,
+				MaxInstances = 3,
+			};
 		}
 
 		public override bool AltFunctionUse(Player player) {
