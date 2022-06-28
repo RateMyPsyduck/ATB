@@ -21,7 +21,7 @@ namespace ATB.Items
     class PhotonLauncher:ModItem
 	{
 		int[] timers = {0,0,0,0};
-		//SoundStyle Pew = new SoundStyle($"{nameof(ATB)}/Items/PhotonLaunch");
+		//SoundStyle Pew = new SoundSt6+yle($"{nameof(ATB)}/Items/PhotonLaunch");
 		public int proj = 0;
 		public override void SetStaticDefaults() {
 			Tooltip.SetDefault("The power of the sun in the palm of my hand!");
@@ -73,7 +73,7 @@ namespace ATB.Items
 
 		public override void UpdateInventory (Player player){
 			for(int i = 0; i < 4; i++){
-				if(timers[i] > 450){
+				if(timers[i] > 300){
 					timers[i] = 0;
 					SoundEngine.PlaySound(new SoundStyle($"{nameof(ATB)}/Items/PhotonReboot"), player.position);
 					Dust.NewDust(player.Center, player.width, player.height, DustID.MagicMirror, 0f, 0f, 150, Color.Red, 1.3f);
