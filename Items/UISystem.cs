@@ -13,22 +13,31 @@ using Terraria.UI.Chat;
 
 namespace ATB.Items
 {
-	class UISystem : ModSystem
+	class UISystem : ModSystem 
 	{
-        internal MenuBar MenuBar;
-        private UserInterface _menuBar;
+        public static UISystem Instance { get; private set; }
+        internal Display PADD;
+        internal UserInterface inter;
+        bool flip = false;
 
         public override void Load()
         {
-            MenuBar = new MenuBar();
-            MenuBar.Activate();
-            _menuBar = new UserInterface();
-            _menuBar.SetState(MenuBar);
+            if (!Main.dedServ) {
+                PADD = new Display();
+                PADD.Activate();
+                inter = new UserInterface();
+                //_menuBar.SetState(MenuBar);
+            }
+        }
+
+        public override void Unload(){
+            // MyUI?.SomeKindOfUnload(); // If you hold data that needs to be unloaded, call it in OO-fashion
+            // MyUI = null;
         }
 
         public override void UpdateUI(GameTime gameTime)
         {
-            _menuBar?.Update(gameTime);
+            inter?.Update(gameTime);
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -40,12 +49,42 @@ namespace ATB.Items
                     "YourMod: A Description",
                     delegate
                     {
-                        _menuBar.Draw(Main.spriteBatch, new GameTime());
+                        inter.Draw(Main.spriteBatch, new GameTime());
                         return true;
                     },
                     InterfaceScaleType.UI)
                 );
             }
         }
+
+        internal void ShowMyUI() {
+            //inter.SetState(PAD);
+            if(flip == false){
+                inter.SetState(PADD);
+                flip = true;
+            }
+            else{
+                inter.SetState(null);
+                PADD.LCARS.v.Y = Main.screenHeight;
+                PADD.LCARS.first = true;
+                PADD.LCARSButton1.v.Y = Main.screenHeight;
+                PADD.LCARSButton1.first = true;
+                PADD.LCARSButton2.v.Y = Main.screenHeight;
+                PADD.LCARSButton2.first = true;
+                PADD.LCARSButton3.v.Y = Main.screenHeight;
+                PADD.LCARSButton3.first = true;
+                PADD.LCARSButton4.v.Y = Main.screenHeight;
+                PADD.LCARSButton4.first = true;
+                PADD.PADDFrame.v.Y = Main.screenHeight;
+                PADD.PADDFrame.first = true;
+                flip = false;
+            }
+        }
+
+        internal void HideMyUI() {
+            inter.SetState(null);
+        }
+
+
     }
 }

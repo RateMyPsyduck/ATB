@@ -1,5 +1,6 @@
 using Terraria.GameContent.UI;
 using Terraria.ModLoader;
+using Terraria;
 
 namespace ATB
 {
@@ -10,11 +11,13 @@ namespace ATB
 
 		// public static int ExampleCustomCurrencyId;
 		public static ModKeybind beamKey;
+		public static ModKeybind UIKey;
 
 		public override void Load() {
 		// 	// Registers a new custom currency
 		// 	ExampleCustomCurrencyId = CustomCurrencyManager.RegisterCurrency(new Content.Currencies.ExampleCustomCurrency(ModContent.ItemType<Content.Items.ExampleItem>(), 999L, "Mods.ExampleMod.Currencies.ExampleCustomCurrency"));
 			beamKey = KeybindLoader.RegisterKeybind(this, "Beam", "B");
+			UIKey = KeybindLoader.RegisterKeybind(this, "UIup", "L");
 		}
 
 		// public override void Unload() {

@@ -13,6 +13,7 @@ using Terraria.Map;
 using Terraria.DataStructures;
 using System;
 using System.Windows.Input;
+using ATB;
 
 namespace ATB.Items
 {
@@ -155,6 +156,8 @@ namespace ATB.Items
 	public class BeamPlayer : ModPlayer
 	{
 		Player player = Main.LocalPlayer;
+		//UISystem ui = new UISystem();
+		UISystem ui = ModContent.GetInstance<UISystem>();
 		bool TimerTrig = false;
 		bool TimerFin = false;
 		SoundStyle BU = new SoundStyle($"{nameof(ATB)}/Items/BeamUp");
@@ -171,6 +174,9 @@ namespace ATB.Items
 					//Main.LocalPlayer.AddBuff(10, 20);
 					SoundEngine.PlaySound(BU, Main.LocalPlayer.position);
 					
+				}
+				else if(ATB.UIKey.JustPressed){
+					ui.ShowMyUI();
 				}
 			}
 
