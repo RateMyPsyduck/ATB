@@ -1,6 +1,17 @@
     using Terraria.UI;
     using Terraria.GameContent.UI.Elements;
-    using Terraria;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Graphics;
+using Terraria;
+using Terraria.GameContent;
+using Terraria.Graphics;
+using Terraria.ID;
+using Terraria.Localization;
+using Terraria.ModLoader;
+using Terraria.UI;
+using Terraria.UI.Chat;
 
     namespace ATB.Items
     {
@@ -33,53 +44,44 @@
                 Append(LCARSButton4);
                 Append(PADDFrame);
 
-                panel.Width.Set(100, 0);
-                panel.Height.Set(100, 0);
-                panel.HAlign = 0.5f;
-                panel.VAlign = 0.3f;
+                panel.Width.Set(10, 0);
+                panel.Height.Set(10, 0);
+                panel.HAlign = 0.43f;
+                panel.VAlign = 0.352f;
+
                 Append(panel);
 
-                panel2.Width.Set(100, 0);
-                panel2.Height.Set(100, 0);
-                panel2.HAlign = 0.5f;
-                panel2.VAlign = 0.3f;
+                panel2.Width.Set(10, 0);
+                panel2.Height.Set(10, 0);
+                panel2.HAlign = 0.43f;
+                panel2.VAlign = 0.33f;
                 Append(panel2);
-
-                // text = new UIText(Main.LocalPlayer.position.Y.ToString());
-                // text.HAlign = 0.5f; // 1
-                // text.VAlign = 0.5f; // 1
-                // panel.Append(text);
-
-                // text2 = new UIText(Main.LocalPlayer.position.X.ToString());
-                // text.HAlign = 0.4f; // 1
-                // text.VAlign = 0.5f; // 1
-                // panel2.Append(text2);
             }
 
-        public override void Recalculate(){
+        public override void Update(GameTime gameTime){
                 panel.RemoveAllChildren();
                 panel2.RemoveAllChildren();
-                text = new UIText((Main.LocalPlayer.Center.Y / 16).ToString());
-                text.HAlign = -1f; // 1
-                text.VAlign = -1f; // 1
+                text = new UIText("Y Position: " + ((int)(Main.LocalPlayer.Center.Y / 16)).ToString());
+                text.HAlign = 0.5f; // 1
+                text.VAlign = 0.5f; // 1
 
-                text2 = new UIText((Main.LocalPlayer.position.X /16).ToString());
-                text.HAlign = -2f; // 1
-                text.VAlign = -2f; // 1
+                text2 = new UIText("X Position: " + ((int)(Main.LocalPlayer.position.X /16)).ToString());
+                text2.HAlign = 0.5f; // 1
+                text2.VAlign = 0.5f; // 1
 
-                panel = new UIElement();
-                panel.Width.Set(300, 0);
-                panel.Height.Set(300, 0);
-                panel.HAlign = 0.5f;
-                panel.VAlign = 0.3f;
-                Append(panel);
+                // panel = new UIElement();
+                // panel.Width.Set(300, 0);
+                // panel.Height.Set(300, 0);
+                // panel.HAlign = 0.5f;
+                // panel.VAlign = 0.3f;
+                // Append(panel);
 
-                panel2 = new UIElement();
-                panel2.Width.Set(300, 0);
-                panel2.Height.Set(300, 0);
-                panel2.HAlign = 0.5f;
-                panel2.VAlign = 0.3f;
-                Append(panel2);
+                // panel2 = new UIElement();
+                // panel2.Width.Set(300, 0);
+                // panel2.Height.Set(300, 0);
+                // panel2.HAlign = 0.5f;
+                // panel2.VAlign = 0.3f;
+                // Append(panel2);
 
                 panel.Append(text);
                 panel2.Append(text2);
