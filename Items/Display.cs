@@ -1,17 +1,18 @@
+    using System;
     using Terraria.UI;
     using Terraria.GameContent.UI.Elements;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Graphics;
-using Terraria;
-using Terraria.GameContent;
-using Terraria.Graphics;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using Terraria.UI;
-using Terraria.UI.Chat;
+    using System.Collections.Generic;
+    using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
+    using ReLogic.Graphics;
+    using Terraria;
+    using Terraria.GameContent;
+    using Terraria.Graphics;
+    using Terraria.ID;
+    using Terraria.Localization;
+    using Terraria.ModLoader;
+    using Terraria.Map;
+    using Terraria.UI.Chat;
 
     namespace ATB.Items
     {
@@ -27,6 +28,9 @@ using Terraria.UI.Chat;
             public UIText text2; 
             public UIElement panel = new UIElement();
             public UIElement panel2 = new UIElement();
+            public UIElement panel3 = new UIElement();
+            public bool first = true;
+            public int[,] Map;
 
             public override void OnInitialize()
             {
@@ -44,6 +48,14 @@ using Terraria.UI.Chat;
                 Append(LCARSButton4);
                 Append(PADDFrame);
 
+                // Map = new int[Main.maxTilesX, Main.maxTilesY];
+                
+                // for(int i = 0; i < Main.maxTilesY; i++){
+                //     for(int l = 0; l < Main.maxTilesX; l++){
+                //         Map[i,l] = Framing.GetTileSafely(i,l).TileType;
+                //     }
+                // }
+
                 panel.Width.Set(10, 0);
                 panel.Height.Set(10, 0);
                 panel.HAlign = 0.43f;
@@ -55,36 +67,57 @@ using Terraria.UI.Chat;
                 panel2.Height.Set(10, 0);
                 panel2.HAlign = 0.43f;
                 panel2.VAlign = 0.33f;
+
                 Append(panel2);
+
+                panel3.Width.Set(Main.maxTilesX, 0);
+                panel3.Height.Set(Main.maxTilesY, 0);
+                panel3.HAlign = 0.2f;
+                panel3.VAlign = 0.2f;
+
+                Append(panel3);
+
             }
+
+        public override void OnActivate(){
+                Map = new int[Main.maxTilesX, Main.maxTilesY];
+                
+                for(int i = 0; i < Map.GetLength(0); i++){
+                    for(int l = 0; l < Map.GetLength(1); l++){
+                        Map[i,l] = Framing.GetTileSafely(i,l).TileType;
+                    }
+                }
+        }
 
         public override void Update(GameTime gameTime){
                 panel.RemoveAllChildren();
                 panel2.RemoveAllChildren();
-                text = new UIText("Y Position: " + ((int)(Main.LocalPlayer.Center.Y / 16)).ToString());
-                text.HAlign = 0.5f; // 1
-                text.VAlign = 0.5f; // 1
+                    text2 = new UIText("X Position: " + ((int)(Main.LocalPlayer.position.X /16)).ToString());
+                    // text2 = new UIText(Map[].ToString());
+                    text2.HAlign = 0.5f;
+                    text2.VAlign = 0.5f;
+                    // first = false;
+                //panel2.RemoveAllChildren();
+                text = new UIText(Map.GetLength(0).ToString());
+                //text = new UIText("Y Position: " + ((int)(Main.LocalPlayer.Center.Y / 16)).ToString());
+                text.HAlign = 0.5f;
+                text.VAlign = 0.5f;
 
-                text2 = new UIText("X Position: " + ((int)(Main.LocalPlayer.position.X /16)).ToString());
-                text2.HAlign = 0.5f; // 1
-                text2.VAlign = 0.5f; // 1
+                for(int i = 0; i < Map.GetLength(0); i++){
+                    for(int l = 0; l < Map.GetLength(1); l++){
+                        panel3.Append(new PADDMapSquare(i, l, Map[i,l]));
+                    }
+                }
 
-                // panel = new UIElement();
-                // panel.Width.Set(300, 0);
-                // panel.Height.Set(300, 0);
-                // panel.HAlign = 0.5f;
-                // panel.VAlign = 0.3f;
-                // Append(panel);
-
-                // panel2 = new UIElement();
-                // panel2.Width.Set(300, 0);
-                // panel2.Height.Set(300, 0);
-                // panel2.HAlign = 0.5f;
-                // panel2.VAlign = 0.3f;
-                // Append(panel2);
+                // text2 = new UIText("X Position: " + ((int)(Main.LocalPlayer.position.X /16)).ToString());
+                // text2 = new UIText(ModContent.GetInstance<WorldMap>().MaxHeight.ToString());
+                // text2.HAlign = 0.5f;
+                // text2.VAlign = 0.5f;
 
                 panel.Append(text);
-                panel2.Append(text2);
+                if(text2 != null){
+                    panel2.Append(text2);
+                }
         }
     }
         
