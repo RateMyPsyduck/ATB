@@ -35,12 +35,14 @@
             public LCARSButton3 LCARSButton3;
             public LCARSButton4 LCARSButton4;
             public PADDFrame PADDFrame;
-            public UIText text;
-            public UIText text2; 
-            public UIText text3; 
+            public UIText textY;
+            public UIText textX; 
+            public UIText scanText; 
             public UIElement panel = new UIElement();
             public UIElement panel2 = new UIElement();
             public UIElement panel3 = new UIElement();
+            public UIElement panel4 = new UIElement();
+            public UIElement panel5 = new UIElement();
             public bool first = true;
             public int[,] Map;
             Asset<Texture2D> square = ModContent.Request<Texture2D>($"ATB/Items/Square");
@@ -93,6 +95,20 @@
 
                 Append(panel3);
 
+                panel4.Width.Set(10, 0);
+                panel4.Height.Set(10, 0);
+                panel4.HAlign = 0.5167f;
+                panel4.VAlign = 0.44f;
+
+                Append(panel4);
+
+                panel5.Width.Set(Main.maxTilesX, 0);
+                panel5.Height.Set(Main.maxTilesX, 0);
+                panel5.HAlign = 0f;
+                panel5.VAlign = 0f;
+
+                Append(panel5);
+
             //     int x = 0;
             //     int y = 0;
 
@@ -121,6 +137,7 @@
 
         public override void OnActivate(){
                 panel3.RemoveAllChildren();
+                pointA =  Main.LocalPlayer.Center;
                 int x = 0;
                 int y = 0;
 
@@ -148,46 +165,33 @@
         public override void Update(GameTime gameTime){
                 panel.RemoveAllChildren();
                 panel2.RemoveAllChildren();
+                panel4.RemoveAllChildren();
                 pointA =  Main.LocalPlayer.Center;
-                //     text2 = new UIText("X Position: " + ((int)(Main.LocalPlayer.position.X /16)).ToString());
-                //     text3 = new UIText("Test");
-                //     // text2 = new UIText(Map[].ToString());
-                //     text2.HAlign = 0.5f;
-                //     text2.VAlign = 0.5f;
-                //     text3.HAlign = 0.5f;
-                //     text3.VAlign = 0.5f;
-                //     // first = false;
-                // //panel2.RemoveAllChildren();
-                // // text = new UIText(Map.GetLength(0).ToString());
-                // //text = new UIText("Y Position: " + ((int)(Main.LocalPlayer.Center.Y / 16)).ToString());
-                // text.HAlign = 0.5f;
-                // text.VAlign = 0.5f;
 
-                // // int x = 0;
-                // // int y = 0;
 
-                // // for(int i = 940; i < 1020; i++){
-                // //     y = y + 2;
-                // //     for(int l = 940; l < 1020; l++){
-                // //         PADDMapSquare squ = new PADDMapSquare(x, y, Map[i,l]);
-                // //         squ.HAlign = 0.5f;
-                // //         squ.VAlign = 0.2f;
-                // //         panel3.Append(squ);
-                // //         x = x + 2;
-                // //     }
-                // //     x = 0;
-                // // }
+                textX = new UIText("X Position: " + ((int)(Main.LocalPlayer.position.X /16)).ToString());
+                textX.HAlign = 0.5f;
+                textX.VAlign = 0.5f;
 
-                // // text2 = new UIText("X Position: " + ((int)(Main.LocalPlayer.position.X /16)).ToString());
-                // // text2 = new UIText(ModContent.GetInstance<WorldMap>().MaxHeight.ToString());
-                // // text2.HAlign = 0.5f;
-                // // text2.VAlign = 0.5f;
+                textY = new UIText("Y Position: " + ((int)(Main.LocalPlayer.Center.Y / 16)).ToString());
+                textY.HAlign = 0.5f;
+                textY.VAlign = 0.5f;
 
-                // panel.Append(text);
-                // if(text2 != null){
-                //     panel2.Append(text2);
-                // }
-               //panel3.Append(text3);
+                scanText = new UIText("Local Area Scan:");
+                scanText.HAlign = 0.5f;
+                scanText.VAlign = 0.5f;
+
+                panel.Append(textY);
+
+                panel2.Append(textX);
+
+                panel4.Append(scanText);
+
+                TextInput t = new TextInput("Test");  
+                t.HAlign = 0.5f;
+                t.VAlign = 0.5f;
+
+                panel5.Append(t);
         }
     }
         

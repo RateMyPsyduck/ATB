@@ -7,6 +7,11 @@ using Terraria.ModLoader;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.GameContent.UI.Elements;
+using System;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using Microsoft.Xna.Framework.Input;
+using Terraria.GameInput;
 
     namespace ATB.Items
     {
@@ -134,7 +139,7 @@ using Terraria.GameContent.UI.Elements;
                 if(v.Y > (Main.screenHeight / 2f) - 224){
                     v.Y = v.Y - 30;
                 }
-                spriteBatch.Draw((Texture2D)Front, new Vector2((v.X / 2f) - 366, v.Y - 80), Microsoft.Xna.Framework.Color.White);
+                spriteBatch.Draw((Texture2D)Front, new Vector2((v.X / 2f) - 384, v.Y - 80), Microsoft.Xna.Framework.Color.White);
             }  
         }
 
@@ -145,6 +150,7 @@ using Terraria.GameContent.UI.Elements;
             int y;
             public int type;
             Asset<Texture2D> square;
+            int start = (int)Main.screenHeight;
 
             public PADDMapSquare(int x, int y, int type, Asset<Texture2D> square){
                 this.x = (int)(x + (Main.screenWidth / 2f) - 620);
@@ -161,17 +167,25 @@ using Terraria.GameContent.UI.Elements;
                 //     v = new Vector2(Main.screenWidth, Main.screenHeight);  
                 //     first = false;
                 // }
-                // if(v.Y > (Main.screenHeight / 2f) - 224){
-                //     v.Y = v.Y - 30;
-                // }
+                if(start > y){
+                    start = start - 45;
+                }
+                else{
+                    start = y;
+                }
+
+
                 if(this.type == 0){
                     this.type = 20;
                 }
-                spriteBatch.Draw((Texture2D)square, new Vector2(x,y), new Color(0,0,(type) * 2));
+                spriteBatch.Draw((Texture2D)square, new Vector2(x,start), new Color(0,0,(type) * 2));
                 // PictureBox b = new PictureBox()
                 // Graphics g = System.CreateGraphics();
                 // g.DrawRectangle(new Pen((0,0,type), 1), x, y, 4, 4);   
             }  
         }
+
+    internal class TextInput : UIElement
+    {
         
     }   
