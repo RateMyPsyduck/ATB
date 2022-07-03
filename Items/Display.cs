@@ -45,10 +45,13 @@
             public UIElement panel5 = new UIElement();
             public bool first = true;
             public int[,] Map;
+            public int timer = 0;
             Asset<Texture2D> square = ModContent.Request<Texture2D>($"ATB/Items/Square");
             public int xhi;
             public int yhi;
             public Vector2 pointA =  Main.LocalPlayer.Center;
+            bool firstupdate = false;
+            int hold;
 
             public override void OnInitialize()
             {
@@ -88,8 +91,8 @@
 
                 Append(panel2);
 
-                panel3.Width.Set(Main.maxTilesX, 0);
-                panel3.Height.Set(Main.maxTilesY, 0);
+                panel3.Width.Set(Main.screenWidth, 0);
+                panel3.Height.Set(Main.screenHeight, 0);
                 panel3.HAlign = 0f;
                 panel3.VAlign = 0f;
 
@@ -135,31 +138,33 @@
 
             }
 
-        public override void OnActivate(){
-                panel3.RemoveAllChildren();
-                pointA =  Main.LocalPlayer.Center;
-                int x = 0;
-                int y = 0;
+        // public override void OnActivate(){
+        //         panel3.RemoveAllChildren();
+        //         pointA =  Main.LocalPlayer.Center;
+        //         int x = 0;
+        //         int y = 0;
 
-               //int xlow = (int)pointA.X - 60;
-                xhi = (int)pointA.X / 16 + 155;
-                yhi = (int)pointA.Y / 16 + 75;
+        //        //int xlow = (int)pointA.X - 60;
+        //         xhi = (int)pointA.X / 16 + 155;
+        //         yhi = (int)pointA.Y / 16 + 75;
 
-                for(int xlow = ((int)pointA.X / 16) - 155; xlow < xhi; xlow++){
-                    y = y + 1;
-                    for(int ylow = ((int)pointA.Y /16) - 75; ylow < yhi; ylow++){
-                        PADDMapSquare squ = new PADDMapSquare(y, x, Framing.GetTileSafely(xlow, ylow).TileType, square);
-                        squ.HAlign = 0.5f;
-                        squ.VAlign = 0.2f;
-                        panel3.Append(squ);
-                        x = x + 1;
-                    }
-                    x = 0;
-                }
-        }
+        //         for(int xlow = ((int)pointA.X / 16) - 155; xlow < xhi; xlow++){
+        //             y = y + 1;
+        //             for(int ylow = ((int)pointA.Y /16) - 75; ylow < yhi; ylow++){
+        //                 if(test == false){
+        //                     hold = Main.screenWidth;
+        //                     test = true;                    
+        //                 }
+        //                 PADDMapSquare squ = new PADDMapSquare(y, x, Framing.GetTileSafely(xlow, ylow).TileType, square, (int)Main.screenHeight);
+        //                 panel3.Append(squ);
+        //                 x = x + 1;
+        //             }
+        //             x = 0;
+        //         }
+        // }
 
         // public override void OnDeactivate(){
-        //         panel3.RemoveAllChildren();
+        //         firstupdate = false;
         // }
 
         public override void Update(GameTime gameTime){
@@ -186,12 +191,30 @@
                 panel2.Append(textX);
 
                 panel4.Append(scanText);
+                timer++;
+                if(timer > 30 || firstupdate == false){
+                    timer = 0;
+                    panel3.RemoveAllChildren();
+                    pointA =  Main.LocalPlayer.Center;
+                    int x = 0;
+                    int y = 0;
 
-                TextInput t = new TextInput("Test");  
-                t.HAlign = 0.5f;
-                t.VAlign = 0.5f;
+                //int xlow = (int)pointA.X - 60;
+                    xhi = (int)pointA.X / 16 + 155;
+                    yhi = (int)pointA.Y / 16 + 75;
 
-                panel5.Append(t);
+                    for(int xlow = ((int)pointA.X / 16) - 155; xlow < xhi; xlow++){
+                        y = y + 1;
+                        for(int ylow = ((int)pointA.Y /16) - 75; ylow < yhi; ylow++){
+                            PADDMapSquare squ = new PADDMapSquare(y, x, Framing.GetTileSafely(xlow, ylow).TileType, square, y, firstupdate);
+                            panel3.Append(squ);
+                            x = x + 1;
+                        }
+                        x = 0;
+                    }
+                    firstupdate = true;
+                }
+                
         }
     }
         

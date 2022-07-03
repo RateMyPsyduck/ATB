@@ -43,7 +43,7 @@ using Terraria.GameInput;
             public bool first = true;
             public Vector2 v;
 
-            Asset<Texture2D> Front = ModContent.Request<Texture2D>($"ATB/Items/LCARSButton1");
+            Asset<Texture2D> Front = ModContent.Request<Texture2D>($"ATB/Items/LCARSButton1_Grey");
 
             public override void Draw(SpriteBatch spriteBatch)
             {
@@ -65,6 +65,14 @@ using Terraria.GameInput;
             public Vector2 v;
 
             Asset<Texture2D> Front = ModContent.Request<Texture2D>($"ATB/Items/LCARSButton2");
+
+            public LCARSButton2(){
+                this.OnClick += OnButtonClick;
+            }
+
+            private void OnButtonClick(UIMouseEvent evt, UIElement listeningElement) {
+                Main.NewText("Test");
+            }
 
             public override void Draw(SpriteBatch spriteBatch)
             {
@@ -146,17 +154,27 @@ using Terraria.GameInput;
         class PADDMapSquare : UIElement
         {
             bool first = true;
-            int x;
-            int y;
+            float x;
+            float y;
             public int type;
             Asset<Texture2D> square;
-            int start = (int)Main.screenHeight;
+            float start;
+            Vector2 star;
+            bool firstupdate;
 
-            public PADDMapSquare(int x, int y, int type, Asset<Texture2D> square){
-                this.x = (int)(x + (Main.screenWidth / 2f) - 620);
-                this.y = (int)(y + (Main.screenHeight/ 2f) - 320);
+            public PADDMapSquare(float x, float y, int type, Asset<Texture2D> square, float start, bool firstupdate){
+                this.x = (x + (Main.screenWidth  / 2f) - 124);
+                this.y = (y + (Main.screenHeight / 2f) - 26);
                 this.type = type;
                 this.square = square;
+                if(firstupdate == false){
+                    star = new Vector2(x, Main.screenHeight + (y * 2));
+                    //this.start = Main.screenHeight + y;
+                }
+                else{
+                    star = new Vector2(x, y);
+                }
+
                 // Apply all SetPixel calls
             }
 
@@ -167,25 +185,21 @@ using Terraria.GameInput;
                 //     v = new Vector2(Main.screenWidth, Main.screenHeight);  
                 //     first = false;
                 // }
-                if(start > y){
-                    start = start - 45;
+                if(star.Y > y){
+                    star.Y = star.Y - 30;
                 }
                 else{
-                    start = y;
+                    star.Y = y;
                 }
 
 
                 if(this.type == 0){
                     this.type = 20;
                 }
-                spriteBatch.Draw((Texture2D)square, new Vector2(x,start), new Color(0,0,(type) * 2));
+                spriteBatch.Draw((Texture2D)square, new Vector2(x,star.Y), new Color(0,0,(type) * 2));
                 // PictureBox b = new PictureBox()
                 // Graphics g = System.CreateGraphics();
                 // g.DrawRectangle(new Pen((0,0,type), 1), x, y, 4, 4);   
             }  
         }
-
-    internal class TextInput : UIElement
-    {
-        
-    }   
+    }
