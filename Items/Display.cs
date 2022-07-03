@@ -14,6 +14,7 @@
     using Terraria.ModLoader;
     using Terraria.Map;
     using Terraria.UI.Chat;
+    using Terraria.Audio;
 
 //     using Terraria;
 // using Terraria.UI;
@@ -44,9 +45,10 @@
             public UIElement panel4 = new UIElement();
             public UIElement panel5 = new UIElement();
             public bool first = true;
+            public bool freeDraw = true;
             public int[,] Map;
             public int timer = 0;
-            Asset<Texture2D> square = ModContent.Request<Texture2D>($"ATB/Items/Square");
+            Asset<Texture2D> square = ModContent.Request<Texture2D>($"ATB/Items/Square", AssetRequestMode.ImmediateLoad);
             public int xhi;
             public int yhi;
             public Vector2 pointA =  Main.LocalPlayer.Center;
@@ -57,25 +59,23 @@
             {
                 LCARS = new LCARS();
                 LCARSButton1 = new LCARSButton1();
-                LCARSButton2 = new LCARSButton2();
+                LCARSButton2 = new LCARSButton2(ModContent.Request<Texture2D>($"ATB/Items/LCARSButton2"));
+
+                LCARSButton2.OnClick += SaveClick;
+                LCARSButton2.Width.Set(94, 0);
+                LCARSButton2.Height.Set(27, 0);
+                LCARSButton2.HAlign = 0.0f;
+                LCARSButton2.VAlign = 0.0f;
+
                 LCARSButton3 = new LCARSButton3();
                 LCARSButton4 = new LCARSButton4();
                 PADDFrame = new PADDFrame();
 
                 Append(LCARS);
                 Append(LCARSButton1);
-                Append(LCARSButton2);
                 Append(LCARSButton3);
                 Append(LCARSButton4);
                 Append(PADDFrame);
-
-                // Map = new int[Main.maxTilesX, Main.maxTilesY];
-                
-                // for(int i = 0; i < Main.maxTilesY; i++){
-                //     for(int l = 0; l < Main.maxTilesX; l++){
-                //         Map[i,l] = Framing.GetTileSafely(i,l).TileType;
-                //     }
-                // }
 
                 panel.Width.Set(10, 0);
                 panel.Height.Set(10, 0);
@@ -105,67 +105,25 @@
 
                 Append(panel4);
 
-                panel5.Width.Set(Main.maxTilesX, 0);
-                panel5.Height.Set(Main.maxTilesX, 0);
-                panel5.HAlign = 0f;
-                panel5.VAlign = 0f;
+                panel5.Width.Set(200, 0);
+                panel5.Height.Set(100, 0);
+                panel5.HAlign = 0.647f;
+                panel5.VAlign = 0.3947f;
 
                 Append(panel5);
 
-            //     int x = 0;
-            //     int y = 0;
-
-            //    Vector2 pointA =  Main.LocalPlayer.Center;
-
-            //    //int xlow = (int)pointA.X - 60;
-            //    int xhi = (int)pointA.X / 16 + 60;
-            //    int yhi = (int)pointA.Y / 16 + 60;
-
-            //    Main.NewText(Main.LocalPlayer.Center.ToString());
-
-
-            //     // for(int xlow = ((int)pointA.X /16) - 60; xlow < xhi; xlow++){
-            //     //     y = y + 1;
-            //     //     for(int ylow = ((int)pointA.Y /16) - 60; ylow < yhi; ylow++){
-            //     //         PADDMapSquare squ = new PADDMapSquare(y, x, Main.tile[ylow,xlow].TileType);
-            //     //         squ.HAlign = 0.5f;
-            //     //         squ.VAlign = 0.2f;
-            //     //         panel3.Append(squ);
-            //     //         x = x + 1;
-            //     //     }
-            //     //     x = 0;
-            //     // }
-
+                panel5.Append(LCARSButton2);
             }
 
-        // public override void OnActivate(){
-        //         panel3.RemoveAllChildren();
-        //         pointA =  Main.LocalPlayer.Center;
-        //         int x = 0;
-        //         int y = 0;
+            private void SaveClick(UIMouseEvent evt, UIElement listeningElement) {
+                Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeamLocations.Add(Main.LocalPlayer.BottomLeft);
+                Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeeamLocationPointer = Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeamLocations.Count - 1;
+            }
 
-        //        //int xlow = (int)pointA.X - 60;
-        //         xhi = (int)pointA.X / 16 + 155;
-        //         yhi = (int)pointA.Y / 16 + 75;
-
-        //         for(int xlow = ((int)pointA.X / 16) - 155; xlow < xhi; xlow++){
-        //             y = y + 1;
-        //             for(int ylow = ((int)pointA.Y /16) - 75; ylow < yhi; ylow++){
-        //                 if(test == false){
-        //                     hold = Main.screenWidth;
-        //                     test = true;                    
-        //                 }
-        //                 PADDMapSquare squ = new PADDMapSquare(y, x, Framing.GetTileSafely(xlow, ylow).TileType, square, (int)Main.screenHeight);
-        //                 panel3.Append(squ);
-        //                 x = x + 1;
-        //             }
-        //             x = 0;
-        //         }
-        // }
-
-        // public override void OnDeactivate(){
-        //         firstupdate = false;
-        // }
+        public override void OnDeactivate(){
+            panel3.RemoveAllChildren();
+            firstupdate = false;
+        }
 
         public override void Update(GameTime gameTime){
                 panel.RemoveAllChildren();
@@ -186,20 +144,23 @@
                 scanText.HAlign = 0.5f;
                 scanText.VAlign = 0.5f;
 
+                if(Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeamLocations.Count != 0){
+                    scanText.SetText("X: " + Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeamLocations[Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeeamLocationPointer].X / 16 + " - " + "Y: " + Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeamLocations[Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeeamLocationPointer].Y / 16);
+                }
+
                 panel.Append(textY);
 
                 panel2.Append(textX);
 
                 panel4.Append(scanText);
                 timer++;
-                if(timer > 30 || firstupdate == false){
+                if(timer > 30 || firstupdate == false && freeDraw == true){
                     timer = 0;
                     panel3.RemoveAllChildren();
                     pointA =  Main.LocalPlayer.Center;
                     int x = 0;
                     int y = 0;
 
-                //int xlow = (int)pointA.X - 60;
                     xhi = (int)pointA.X / 16 + 155;
                     yhi = (int)pointA.Y / 16 + 75;
 
@@ -217,6 +178,4 @@
                 
         }
     }
-        
-
 }

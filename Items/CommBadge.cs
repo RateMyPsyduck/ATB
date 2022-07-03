@@ -158,6 +158,11 @@ namespace ATB.Items
 		Player player = Main.LocalPlayer;
 		//UISystem ui = new UISystem();
 		UISystem ui = ModContent.GetInstance<UISystem>();
+
+		public List<Vector2> BeamLocations = new List<Vector2>();
+		public int BeeamLocationPointer = 0;
+
+		public Vector2 BeamLocation = new Vector2(1,1);
 		bool TimerTrig = false;
 		bool TimerFin = false;
 		SoundStyle BU = new SoundStyle($"{nameof(ATB)}/Items/BeamUp");
@@ -168,8 +173,7 @@ namespace ATB.Items
 		public override void ProcessTriggers(TriggersSet triggersSet)
 			{
 				//Berserk minion hotkey
-				if (ATB.beamKey.JustPressed && CommBadgeOn == true) {
-					Main.NewText(Main.maxTilesX.ToString() + " , " + Main.maxTilesY.ToString(), 150, 0, 0);
+				if (ATB.beamKey.JustPressed && CommBadgeOn == true && BeamLocations.Count > 0) {
 					TimerTrig = true;
 					//Main.LocalPlayer.AddBuff(10, 20);
 					SoundEngine.PlaySound(BU, Main.LocalPlayer.position);
@@ -204,7 +208,9 @@ namespace ATB.Items
 			if(TimerTrig == true){
 				Timer++;
 				if(Timer > 100){		
-			 		Main.LocalPlayer.Teleport(new Vector2(random.Next(Main.maxTilesX * 16),random.Next(Main.maxTilesY * 16)), -1);
+					BeamLocation = BeamLocations[BeeamLocationPointer];
+					BeamLocation.Y = BeamLocation.Y - Main.LocalPlayer.height;
+			 		Main.LocalPlayer.Teleport((BeamLocation), -1);
 					TimerTrig = false;
 					Timer = 0;
 					for (int d = 0; d < 35; d++) {

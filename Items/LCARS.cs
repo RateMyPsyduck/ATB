@@ -59,21 +59,23 @@ using Terraria.GameInput;
             }
         }
 
-        class LCARSButton2 : UIElement
+        class LCARSButton2 : UIImageButton
         {
             public bool first = true;
             public Vector2 v;
 
-            Asset<Texture2D> Front = ModContent.Request<Texture2D>($"ATB/Items/LCARSButton2");
+            Asset<Texture2D> Front;
 
-            public LCARSButton2(){
-                this.OnClick += OnButtonClick;
+            public LCARSButton2(Asset<Texture2D> texture) : base(texture){
+                this.SetImage(texture);
+                this.SetVisibility(1f,1f);
+                this.Front = texture;
             }
 
-            private void OnButtonClick(UIMouseEvent evt, UIElement listeningElement) {
-                Main.NewText("Test");
-            }
 
+            protected override void DrawSelf(SpriteBatch spriteBatch) {
+                base.DrawSelf(spriteBatch);
+            }
             public override void Draw(SpriteBatch spriteBatch)
             {
                 if(first) {
@@ -162,13 +164,13 @@ using Terraria.GameInput;
             Vector2 star;
             bool firstupdate;
 
-            public PADDMapSquare(float x, float y, int type, Asset<Texture2D> square, float start, bool firstupdate){
-                this.x = (x + (Main.screenWidth  / 2f) - 124);
-                this.y = (y + (Main.screenHeight / 2f) - 26);
+            public PADDMapSquare(float nx, float ny, int type, Asset<Texture2D> square, float start, bool firstupdate){
+                this.x = (nx + (Main.screenWidth  / 2f) - 124);
+                this.y = (ny + (Main.screenHeight / 2f) - 26);
                 this.type = type;
                 this.square = square;
                 if(firstupdate == false){
-                    star = new Vector2(x, Main.screenHeight + (y * 2));
+                    star = new Vector2(x, Main.screenHeight + y - 260);
                     //this.start = Main.screenHeight + y;
                 }
                 else{
@@ -180,12 +182,7 @@ using Terraria.GameInput;
 
             public override void Draw(SpriteBatch spriteBatch)
             {
-                // if(first) {
-                //     //Main.NewText(Main.screenHeight.ToString() + ", " + v.Y.ToString(), 100, 0 , 0);
-                //     v = new Vector2(Main.screenWidth, Main.screenHeight);  
-                //     first = false;
-                // }
-                if(star.Y > y){
+                if(star.Y - 15 > y){
                     star.Y = star.Y - 30;
                 }
                 else{
