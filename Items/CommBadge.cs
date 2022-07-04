@@ -243,6 +243,20 @@ namespace ATB.Items
 			}
 		}
 
+		public void IncreaseBeamPointer(){
+			BeeamLocationPointer++;
+			if(BeeamLocationPointer > BeamLocations.Count - 1){
+				BeeamLocationPointer = 0;
+			}
+		}
+
+		public void DecreaseBeamPointer(){
+			BeeamLocationPointer--;
+			if(BeeamLocationPointer < 0){
+				BeeamLocationPointer = BeamLocations.Count - 1;
+			}
+		}
+
 		// public override void PostUpdate(){
 		// 	Main.LocalPlayer.stealth = 0.1f;
 		// 	Main.NewText(Main.LocalPlayer.stealth.ToString(), 0, 200, 0);

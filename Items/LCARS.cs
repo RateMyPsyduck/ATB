@@ -38,40 +38,20 @@ using Terraria.GameInput;
             }
         }
 
-        class LCARSButton1 : UIElement
+        class LCARSButton : UIImageButton
         {
             public bool first = true;
             public Vector2 v;
-
-            Asset<Texture2D> Front = ModContent.Request<Texture2D>($"ATB/Items/LCARSButton1_Grey");
-
-            public override void Draw(SpriteBatch spriteBatch)
-            {
-                if(first) {
-                    //Main.NewText(Main.screenHeight.ToString() + ", " + v.Y.ToString(), 100, 0 , 0);
-                    v = new Vector2(Main.screenWidth, Main.screenHeight);  
-                    first = false;
-                }
-                if(v.Y > (Main.screenHeight / 2f) - 224){
-                    v.Y = v.Y - 30;
-                }
-                spriteBatch.Draw((Texture2D)Front, new Vector2((v.X / 2f) + 200, v.Y + 96), Microsoft.Xna.Framework.Color.White);
-            }
-        }
-
-        class LCARSButton2 : UIImageButton
-        {
-            public bool first = true;
-            public Vector2 v;
+            int DrawPos;
 
             Asset<Texture2D> Front;
 
-            public LCARSButton2(Asset<Texture2D> texture) : base(texture){
+            public LCARSButton(Asset<Texture2D> texture, int DrawPos) : base(texture){
                 this.SetImage(texture);
                 this.SetVisibility(1f,1f);
                 this.Front = texture;
+                this.DrawPos = DrawPos;
             }
-
 
             protected override void DrawSelf(SpriteBatch spriteBatch) {
                 base.DrawSelf(spriteBatch);
@@ -83,52 +63,27 @@ using Terraria.GameInput;
                     v = new Vector2(Main.screenWidth, Main.screenHeight);  
                     first = false;
                 }
-                if(v.Y > (Main.screenHeight / 2f) - 224){
-                    v.Y = v.Y - 30;
+                switch (DrawPos)
+                {
+                    case 1:
+                        if(v.Y > (Main.screenHeight / 2f) - 224){
+                            v.Y = v.Y - 30;
+                        }
+                        spriteBatch.Draw((Texture2D)Front, new Vector2((v.X / 2f) + 102, v.Y + 96), Microsoft.Xna.Framework.Color.White);
+                        break;
+                    case 2:
+                        if(v.Y > (Main.screenHeight / 2f) - 224){
+                            v.Y = v.Y - 30;
+                        }
+                        spriteBatch.Draw((Texture2D)Front, new Vector2((v.X / 2f) + 102, v.Y + 62), Microsoft.Xna.Framework.Color.White);
+                        break;
+                    case 3:
+                        if(v.Y > (Main.screenHeight / 2f) - 224){
+                            v.Y = v.Y - 30;
+                        }
+                        spriteBatch.Draw((Texture2D)Front, new Vector2((v.X / 2f) + 200, v.Y + 62), Microsoft.Xna.Framework.Color.White);
+                        break;
                 }
-                spriteBatch.Draw((Texture2D)Front, new Vector2((v.X / 2f) + 102, v.Y + 96), Microsoft.Xna.Framework.Color.White);
-            }
-        }
-
-        class LCARSButton3 : UIElement
-        {
-            public bool first = true;
-            public Vector2 v;
-
-            Asset<Texture2D> Front = ModContent.Request<Texture2D>($"ATB/Items/LCARSButton4");
-
-            public override void Draw(SpriteBatch spriteBatch)
-            {
-                if(first) {
-                    //Main.NewText(Main.screenHeight.ToString() + ", " + v.Y.ToString(), 100, 0 , 0);
-                    v = new Vector2(Main.screenWidth, Main.screenHeight);  
-                    first = false;
-                }
-                if(v.Y > (Main.screenHeight / 2f) - 224){
-                    v.Y = v.Y - 30;
-                }
-                spriteBatch.Draw((Texture2D)Front, new Vector2((v.X / 2f) + 102, v.Y + 62), Microsoft.Xna.Framework.Color.White);
-            }
-        } 
-
-        class LCARSButton4 : UIElement
-        {
-            public bool first = true;
-            public Vector2 v;
-
-            Asset<Texture2D> Front = ModContent.Request<Texture2D>($"ATB/Items/LCARSButton3");
-
-            public override void Draw(SpriteBatch spriteBatch)
-            {
-                if(first) {
-                    //Main.NewText(Main.screenHeight.ToString() + ", " + v.Y.ToString(), 100, 0 , 0);
-                    v = new Vector2(Main.screenWidth, Main.screenHeight);  
-                    first = false;
-                }
-                if(v.Y > (Main.screenHeight / 2f) - 224){
-                    v.Y = v.Y - 30;
-                }
-                spriteBatch.Draw((Texture2D)Front, new Vector2((v.X / 2f) + 200, v.Y + 62), Microsoft.Xna.Framework.Color.White);
             }
         }
 
