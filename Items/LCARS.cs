@@ -83,6 +83,12 @@ using Terraria.GameInput;
                         }
                         spriteBatch.Draw((Texture2D)Front, new Vector2((v.X / 2f) + 200, v.Y + 62), Microsoft.Xna.Framework.Color.White);
                         break;
+                    case 4:
+                        if(v.Y > (Main.screenHeight / 2f) - 224){
+                            v.Y = v.Y - 30;
+                        }
+                        spriteBatch.Draw((Texture2D)Front, new Vector2((v.X / 2f) + 200, v.Y + 96), Microsoft.Xna.Framework.Color.White);
+                        break;
                 }
             }
         }

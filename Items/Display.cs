@@ -34,7 +34,7 @@
             public LCARSButton SaveButton;
             public LCARSButton PrevButton;
             public LCARSButton NextButton;
-            public LCARSButton LCARSButton4;
+            public LCARSButton DeleteButton;
             public PADDFrame PADDFrame;
             public UIText textY;
             public UIText textX; 
@@ -49,6 +49,7 @@
             public UIElement panel8 = new UIElement();
             public bool first = true;
             public bool freeDraw = true;
+            public bool drawText = false;
             public int[,] Map;
             public int timer = 0;
             Asset<Texture2D> square = ModContent.Request<Texture2D>($"ATB/Items/Square", AssetRequestMode.ImmediateLoad);
@@ -61,7 +62,7 @@
             public override void OnInitialize()
             {
                 LCARS = new LCARS();
-                //LCARSButton1 = new LCARSButton1();
+
                 SaveButton = new LCARSButton(ModContent.Request<Texture2D>($"ATB/Items/LCARSButton2"), 1);
 
                 SaveButton.OnClick += SaveClick;
@@ -86,8 +87,14 @@
                 NextButton.HAlign = 0.0f;
                 NextButton.VAlign = 0.0f;
 
-                // LCARSButton3 = new LCARSButton3();
-                // LCARSButton4 = new LCARSButton4();
+                DeleteButton = new LCARSButton(ModContent.Request<Texture2D>($"ATB/Items/LCARSButton1"), 4);
+
+                DeleteButton.OnClick += DeleteClick;
+                DeleteButton.Width.Set(94, 0);
+                DeleteButton.Height.Set(27, 0);
+                DeleteButton.HAlign = 0.0f;
+                DeleteButton.VAlign = 0.0f;
+
                 PADDFrame = new PADDFrame();
 
                 Append(LCARS);
@@ -142,88 +149,135 @@
 
                 Append(panel7);
 
-                // panel8.Width.Set(200, 0);
-                // panel8.Height.Set(100, 0);
-                // panel8.HAlign = 0.647f;
-                // panel8.VAlign = 0.3947f;
+                panel8.Width.Set(100, 0);
+                panel8.Height.Set(30, 0);
+                panel8.HAlign = 0.67f;
+                panel8.VAlign = 0.362f;
 
-                // Append(panel8);
+                Append(panel8);
 
                 panel5.Append(SaveButton);
 
                 panel6.Append(PrevButton);
 
                 panel7.Append(NextButton);
+
+                panel8.Append(DeleteButton);
+
+                pointA = Main.LocalPlayer.Center;
+
             }
 
             private void SaveClick(UIMouseEvent evt, UIElement listeningElement) {
                 Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeamLocations.Add(Main.LocalPlayer.BottomLeft);
                 Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeeamLocationPointer = Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeamLocations.Count - 1;
+                freeDraw = true;
             }
 
             private void PrevClick(UIMouseEvent evt, UIElement listeningElement) {
-                Main.LocalPlayer.GetModPlayer<BeamPlayer>().DecreaseBeamPointer(); 
+                Main.LocalPlayer.GetModPlayer<BeamPlayer>().DecreaseBeamPointer();
+                pointA = Main.LocalPlayer.GetModPlayer<BeamPlayer>().getDrawPoint();
+                freeDraw = false;
+                firstupdate = false;
             }
 
             private void NextClick(UIMouseEvent evt, UIElement listeningElement) {
                 Main.LocalPlayer.GetModPlayer<BeamPlayer>().IncreaseBeamPointer(); 
+                pointA = Main.LocalPlayer.GetModPlayer<BeamPlayer>().getDrawPoint();
+                freeDraw = false;
+                firstupdate = false;
             }
 
-        public override void OnDeactivate(){
-            panel3.RemoveAllChildren();
-            firstupdate = false;
-        }
+            private void DeleteClick(UIMouseEvent evt, UIElement listeningElement) {
+                Main.LocalPlayer.GetModPlayer<BeamPlayer>().DeleteEntry();
+                Main.LocalPlayer.GetModPlayer<BeamPlayer>().DecreaseBeamPointer();
+                freeDraw = true;
+            }
 
-        public override void Update(GameTime gameTime){
+            public override void OnDeactivate(){
                 panel.RemoveAllChildren();
                 panel2.RemoveAllChildren();
                 panel4.RemoveAllChildren();
-                pointA = Main.LocalPlayer.Center;
+                panel3.RemoveAllChildren();
+                freeDraw = true;
+                firstupdate = false;
+                drawText = false;
+            }
 
-                textX = new UIText("X Position: " + ((int)(Main.LocalPlayer.position.X /16)).ToString());
-                textX.HAlign = 0.5f;
-                textX.VAlign = 0.5f;
+            public override void Update(GameTime gameTime){
+                    panel.RemoveAllChildren();
+                    panel2.RemoveAllChildren();
+                    panel4.RemoveAllChildren();
 
-                textY = new UIText("Y Position: " + ((int)(Main.LocalPlayer.Center.Y / 16)).ToString());
-                textY.HAlign = 0.5f;
-                textY.VAlign = 0.5f;
+                    if(drawText == true){
+                        textX = new UIText("X Position: " + ((int)(Main.LocalPlayer.position.X /16)).ToString());
+                        textX.HAlign = 0.5f;
+                        textX.VAlign = 0.5f;
 
-                scanText = new UIText("Local Area Scan:");
-                scanText.HAlign = 0.5f;
-                scanText.VAlign = 0.5f;
+                        textY = new UIText("Y Position: " + ((int)(Main.LocalPlayer.Center.Y / 16)).ToString());
+                        textY.HAlign = 0.5f;
+                        textY.VAlign = 0.5f;
 
-                if(Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeamLocations.Count != 0){
-                    scanText.SetText("X: " + Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeamLocations[Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeeamLocationPointer].X / 16 + " - " + "Y: " + Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeamLocations[Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeeamLocationPointer].Y / 16);
-                }
+                        scanText = new UIText("Local Area Scan:");
+                        scanText.HAlign = 0.5f;
+                        scanText.VAlign = 0.5f;
 
-                panel.Append(textY);
-
-                panel2.Append(textX);
-
-                panel4.Append(scanText);
-                timer++;
-                if(timer > 30 || firstupdate == false && freeDraw == true){
-                    timer = 0;
-                    panel3.RemoveAllChildren();
-                    pointA =  Main.LocalPlayer.Center;
-                    int x = 0;
-                    int y = 0;
-
-                    xhi = (int)pointA.X / 16 + 155;
-                    yhi = (int)pointA.Y / 16 + 75;
-
-                    for(int xlow = ((int)pointA.X / 16) - 155; xlow < xhi; xlow++){
-                        y = y + 1;
-                        for(int ylow = ((int)pointA.Y /16) - 75; ylow < yhi; ylow++){
-                            PADDMapSquare squ = new PADDMapSquare(y, x, Framing.GetTileSafely(xlow, ylow).TileType, square, y, firstupdate);
-                            panel3.Append(squ);
-                            x = x + 1;
+                        if(Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeamLocations.Count != 0){
+                            scanText.SetText("X: " + Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeamLocations[Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeeamLocationPointer].X / 16 + "/" + "Y: " + Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeamLocations[Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeeamLocationPointer].Y / 16);
                         }
-                        x = 0;
+
+                        panel.Append(textY);
+
+                        panel2.Append(textX);
+
+                        panel4.Append(scanText);
                     }
-                    firstupdate = true;
-                }
-                
-        }
+                    timer++;
+                    if(timer > 30){
+                        drawText = true;
+                    }
+                    if((timer > 30 || firstupdate == false) && freeDraw == true){
+                        pointA = Main.LocalPlayer.Center;
+                        timer = 0;
+                        panel3.RemoveAllChildren();
+                        int x = 0;
+                        int y = 0;
+
+                        xhi = (int)pointA.X / 16 + 155;
+                        yhi = (int)pointA.Y / 16 + 75;
+
+                        for(int xlow = ((int)pointA.X / 16) - 155; xlow < xhi; xlow++){
+                            y = y + 1;
+                            for(int ylow = ((int)pointA.Y /16) - 75; ylow < yhi; ylow++){
+                                PADDMapSquare squ = new PADDMapSquare(y, x, Framing.GetTileSafely(xlow, ylow).TileType, square, y, firstupdate);
+                                panel3.Append(squ);
+                                x = x + 1;
+                            }
+                            x = 0;
+                        }
+                        firstupdate = true;
+                    }
+                    if((timer > 30 || firstupdate == false) && freeDraw == false){
+                        timer = 0;
+                        panel3.RemoveAllChildren();
+                        int x = 0;
+                        int y = 0;
+
+                        xhi = (int)pointA.X / 16 + 155;
+                        yhi = (int)pointA.Y / 16 + 75;
+
+                        for(int xlow = ((int)pointA.X / 16) - 155; xlow < xhi; xlow++){
+                            y = y + 1;
+                            for(int ylow = ((int)pointA.Y /16) - 75; ylow < yhi; ylow++){
+                                PADDMapSquare squ = new PADDMapSquare(y, x, Framing.GetTileSafely(xlow, ylow).TileType, square, y, true);
+                                panel3.Append(squ);
+                                x = x + 1;
+                            }
+                            x = 0;
+                        }
+                        firstupdate = true;
+                    }
+                    
+            }
     }
 }

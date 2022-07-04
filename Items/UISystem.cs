@@ -73,8 +73,8 @@ namespace ATB.Items
                 PADD.PrevButton.first = true;
                 PADD.NextButton.v.Y = Main.screenHeight;
                 PADD.NextButton.first = true;
-                // PADD.LCARSButton4.v.Y = Main.screenHeight;
-                // PADD.LCARSButton4.first = true;
+                PADD.DeleteButton.v.Y = Main.screenHeight;
+                PADD.DeleteButton.first = true;
                 PADD.PADDFrame.v.Y = Main.screenHeight;
                 PADD.PADDFrame.first = true;
                 flip = false;

@@ -91,7 +91,6 @@ namespace ATB.Items
 			}
 
 			// This sets up the itemTime correctly.
-			Main.NewText(player.itemTime.ToString() + ", " + player.itemTimeMax.ToString(), 150, 0, 0);
 			if (player.itemTime == 0) {
 				player.ApplyItemTime(Item);
 			}
@@ -244,6 +243,9 @@ namespace ATB.Items
 		}
 
 		public void IncreaseBeamPointer(){
+			if(BeamLocations.Count == 0){
+				return;
+			}
 			BeeamLocationPointer++;
 			if(BeeamLocationPointer > BeamLocations.Count - 1){
 				BeeamLocationPointer = 0;
@@ -251,9 +253,28 @@ namespace ATB.Items
 		}
 
 		public void DecreaseBeamPointer(){
+			if(BeamLocations.Count == 0){
+				return;
+			}
 			BeeamLocationPointer--;
 			if(BeeamLocationPointer < 0){
 				BeeamLocationPointer = BeamLocations.Count - 1;
+			}
+		}
+
+		public Vector2 getDrawPoint(){
+			if(BeamLocations.Count == 0){
+				return Main.LocalPlayer.BottomLeft;
+			}
+			return BeamLocations[BeeamLocationPointer];
+		}
+
+		public void DeleteEntry(){
+			if(BeamLocations.Count == 0){
+				return;
+			}
+			else{
+				BeamLocations.RemoveAt(BeeamLocationPointer);
 			}
 		}
 
