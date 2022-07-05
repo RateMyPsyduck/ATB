@@ -243,6 +243,8 @@ namespace ATB.Items
 		}
 
 		public void IncreaseBeamPointer(){
+			Main.NewText(Main.bgStyle.ToString());
+			Main.NewText(Main.LocalPlayer.ZoneDesert.ToString());
 			if(BeamLocations.Count == 0){
 				return;
 			}

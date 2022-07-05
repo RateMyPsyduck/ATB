@@ -1,6 +1,21 @@
 using Terraria.GameContent.UI;
 using Terraria.ModLoader;
 using Terraria;
+using ATB.Items;
+using System;
+using System.Runtime.CompilerServices;
+using Microsoft.Xna.Framework;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.GameContent.Shaders;
+using Terraria.Graphics.Effects;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.Utilities;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+
 
 namespace ATB
 {
@@ -10,6 +25,7 @@ namespace ATB
 		// public const string AssetPath = $"{nameof(ExampleMod)}/Assets/";
 
 		// public static int ExampleCustomCurrencyId;
+
 		public static ModKeybind beamKey;
 		public static ModKeybind UIKey;
 
@@ -18,6 +34,11 @@ namespace ATB
 		// 	ExampleCustomCurrencyId = CustomCurrencyManager.RegisterCurrency(new Content.Currencies.ExampleCustomCurrency(ModContent.ItemType<Content.Items.ExampleItem>(), 999L, "Mods.ExampleMod.Currencies.ExampleCustomCurrency"));
 			beamKey = KeybindLoader.RegisterKeybind(this, "Beam", "B");
 			UIKey = KeybindLoader.RegisterKeybind(this, "UIup", "L");
+			//TextureAssets.Background[21] = ModContent.Request<Texture2D>($"ATB/Items/GornBackground");
+			//TextureAssets.Background[108] = ModContent.Request<Texture2D>($"ATB/Items/GornBackground", (AssetRequestMode)2);
+			 //TextureAssets.Background[207] = ModContent.Request<Texture2D>($"ATB/Items/GornBackground",  (AssetRequestMode)2);
+			TextureAssets.Background[217] = ModContent.Request<Texture2D>($"ATB/Items/GornBackground", (AssetRequestMode)2);
+			// TextureAssets.Background[248] = ModContent.Request<Texture2D>($"ATB/Items/GornBackground");
 		}
 
 		// public override void Unload() {
