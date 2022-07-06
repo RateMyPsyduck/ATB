@@ -2,7 +2,7 @@ using Terraria.ModLoader;
 
 namespace ATB.Items
 {
-	public class GornBackgroundTEST : ModSurfaceBackgroundStyle
+	public class GornBackground : ModSurfaceBackgroundStyle
 	{
 		// Use this to keep far Backgrounds like the mountains.
 		public override void ModifyFarFades(float[] fades, float transitionSpeed) {
