@@ -154,7 +154,7 @@ using Terraria.GameInput;
                 if(this.type == 0){
                     this.type = 20;
                 }
-                spriteBatch.Draw((Texture2D)square, new Vector2(x,star.Y), new Color(0,0,(type) * 2));
+                spriteBatch.Draw((Texture2D)square, new Vector2(x,star.Y), new Color(0,0,(type) * 7));
                 // PictureBox b = new PictureBox()
                 // Graphics g = System.CreateGraphics();
                 // g.DrawRectangle(new Pen((0,0,type), 1), x, y, 4, 4);   

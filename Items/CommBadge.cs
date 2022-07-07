@@ -197,10 +197,10 @@ namespace ATB.Items
 		// 		}
 		// }
 		public override void PreUpdate(){
-			Main.LocalPlayer.shroomiteStealth = true;
-			Main.LocalPlayer.stealth = 0.1f;
-			Main.LocalPlayer.aggro = 1;
-			Main.LocalPlayer.stealthTimer = 0;
+			// Main.LocalPlayer.shroomiteStealth = true;
+			// Main.LocalPlayer.stealth = 0.1f;
+			// Main.LocalPlayer.aggro = 1;
+			// Main.LocalPlayer.stealthTimer = 0;
 			// Main.LocalPlayer.stealthTimer = -750;
 			// Main.NewText(Main.LocalPlayer.stealth.ToString(), 150, 0, 0);
 			//Main.NewText(Main.LocalPlayer.shroomiteStealth.ToString(), 150, 0, 0);
