@@ -6,13 +6,11 @@ using Terraria.ModLoader;
 
 namespace ATB.Items
 {
-	public class StarFleetHandAxe : ModItem
+	public class TholianShockwaveSpear : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("Handy in a crash or a fight.");
-            DisplayName.SetDefault("Survival Axe");
-
-			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+			Tooltip.SetDefault("Fires a sonic blast.");
+            DisplayName.SetDefault("Tholian Shockwave Spear");
 		}
 
 		public override void SetDefaults() {
@@ -28,9 +26,6 @@ namespace ATB.Items
 			Item.rare = ItemRarityID.Green;
 			Item.UseSound = SoundID.Item1;
 			Item.autoReuse = true; // Automatically re-swing/re-use this item after its swinging animation is over.
-
-			Item.axe = 30; // How much axe power the weapon has, note that the axe power displayed in-game is this value multiplied by 5
-			//Item.hammer = 100; // How much hammer power the weapon has
 		}
 	}
 }
