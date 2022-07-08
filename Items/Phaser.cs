@@ -43,22 +43,22 @@ namespace ATB.Items
 			return true;
 		}
 
-		public override bool? UseItem(Player player) {
-			proj++;
-			if(proj > 1){
-				proj = 0;
-			}
-			return false;
-		}
+		// public override bool? UseItem(Player player) {
+		// 	proj++;
+		// 	if(proj > 1){
+		// 		proj = 0;
+		// 	}
+		// 	return false;
+		// }
 
-		public override void ModifyShootStats (Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback){
-			if(proj == 0){
-				type = ProjectileType<PhaserBeam>();
-			}
-			else if(proj == 1){
-				type = ProjectileType<PhaserStun>();
-			}
-		}
+		// public override void ModifyShootStats (Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback){
+		// 	if(proj == 0){
+		// 		type = ProjectileType<PhaserBeam>();
+		// 	}
+		// 	else if(proj == 1){
+		// 		type = ProjectileType<PhaserStun>();
+		// 	}
+		// }
 
 		public override void AddRecipes()
 		{

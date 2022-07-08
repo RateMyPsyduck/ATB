@@ -168,7 +168,10 @@ namespace ATB.Items
 		SoundStyle BD = new SoundStyle($"{nameof(ATB)}/Items/BeamDown");
 		public int Timer;
 		public bool CommBadgeOn;
+		public bool LightHat = false;
 		Random random = new Random();
+
+
 		public override void ProcessTriggers(TriggersSet triggersSet)
 			{
 				//Berserk minion hotkey
@@ -185,6 +188,7 @@ namespace ATB.Items
 
 		public override void ResetEffects() {
 			CommBadgeOn = false;
+			LightHat = false;
 		}
 
 		public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource) {
@@ -239,6 +243,9 @@ namespace ATB.Items
 				}
 
 				}
+			}
+			if(LightHat == true){
+				Lighting.AddLight(new Vector2(Main.LocalPlayer.Center.X, Main.LocalPlayer.BottomLeft.Y - Main.LocalPlayer.height - 2), 0.5f, 0f, 0f);
 			}
 		}
 

@@ -31,6 +31,11 @@ namespace ATB.Items
 			Item.defense = 2; // The amount of defense the item will give when equipped
 		}
 
+
+		public override void UpdateEquip(Player player) {
+			player.GetModPlayer<BeamPlayer>().LightHat = true;
+		}
+
 		// IsArmorSet determines what armor pieces are needed for the setbonus to take effect
 		// public override bool IsArmorSet(Item head, Item body, Item legs) {
 		// 	return body.type == ModContent.ItemType<ExampleBreastplate>() && legs.type == ModContent.ItemType<ExampleLeggings>();

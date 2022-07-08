@@ -94,8 +94,9 @@ namespace ATB.Items
 			float point = 0f;
 			// Run an AABB versus Line check to look for collisions, look up AABB collision first to see how it works
 			// It will look for collisions on the given line using AABB
-			return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), player.Center,
-				player.Center + unit * Distance, 22, ref point);
+			Main.NewText("TOPLEFT: " + targetHitbox.TopLeft().ToString());
+			Main.NewText("TOPLEFT: " + targetHitbox.Size().ToString());
+			return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), player.Center, player.Center + unit * Distance, 22, ref point);
 		}
 
 		// Set custom immunity time on hitting an NPC
@@ -207,8 +208,10 @@ namespace ATB.Items
 			for (Distance = MOVE_DISTANCE; Distance <= 1500f; Distance += 5f) {
 				var start = player.Center + Projectile.velocity * Distance;
 				for(int i = 0; i < 200; i++){
-					if(Collision.CheckAABBvLineCollision(Main.npc[i].getRect().Center(), Main.npc[i].getRect().Size(), player.Center, player.Center + Projectile.velocity * Distance, 22, ref point) && Main.npc[i].active == true){
+					if(Collision.CheckAABBvLineCollision(Main.npc[i].getRect().TopLeft(), Main.npc[i].getRect().Size(), player.Center, player.Center + Projectile.velocity * Distance, 10f * Projectile.scale, ref point) && Main.npc[i].active == true){
 						Flag = true;
+						Main.NewText("TOPLEFT: " + Main.npc[i].getRect().TopLeft().ToString());
+						Main.NewText("TOPLEFT: " + Main.npc[i].getRect().Size().ToString());
 						// Main.NewText("Colliding with: " + Main.npc[i].ToString(), 150, 250, 0);
 						// Main.NewText(Projectile.velocity.ToString(), 150, 0, 0);
 						// Main.NewText(Main.npc[i].FullName, 150, 0, 0);
