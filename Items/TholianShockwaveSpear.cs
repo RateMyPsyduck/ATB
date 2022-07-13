@@ -9,10 +9,8 @@ namespace ATB.Items
 	public class StarFleetHandAxe : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("Handy in a crash or a fight.");
-            DisplayName.SetDefault("Survival Axe");
-
-			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+			Tooltip.SetDefault("St.");
+            DisplayName.SetDefault("Tholian Shockwave Spear");
 		}
 
 		public override void SetDefaults() {
@@ -28,8 +26,6 @@ namespace ATB.Items
 			Item.rare = ItemRarityID.Green;
 			Item.UseSound = SoundID.Item1;
 			Item.autoReuse = true; // Automatically re-swing/re-use this item after its swinging animation is over.
-
-			Item.axe = 30; 
 		}
 	}
 }
