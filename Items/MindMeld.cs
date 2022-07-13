@@ -8,8 +8,12 @@ using Terraria.ModLoader;
 using Terraria.Audio;
 using Terraria.GameContent;
 using ReLogic.Content;
-using ReLogic.Content;
-
+using Terraria.GameContent;
+using Terraria.GameInput;
+using Terraria.Map;
+using Terraria.DataStructures;
+using System;
+using System.Windows.Input;
 using static Terraria.ModLoader.ModContent;
 
 namespace ATB.Items
@@ -25,7 +29,7 @@ namespace ATB.Items
 		public override void SetDefaults() {
 			Item.damage = 20;
 			Item.noMelee = true;
-			Item.channel = false; //Channel so that you can held the weapon [Important]
+			Item.channel = false;
 			Item.mana = 1;
 			Item.rare = ItemRarityID.Pink;
 			Item.width = 28;
@@ -39,7 +43,11 @@ namespace ATB.Items
 			Item.value = Item.sellPrice(silver: 3);
             Item.autoReuse = true;
             Item.noUseGraphic = true;
-			//Item.scale = 0.8f;
+			Item.UseSound = new SoundStyle($"{nameof(ATB)}/Items/MindMeldSound") {
+				Volume = 0.9f,
+				PitchVariance = 0f,
+				MaxInstances = 3,
+			};
 		}
 
 		public override void AddRecipes()
@@ -48,6 +56,19 @@ namespace ATB.Items
 			recipe.AddIngredient(ItemID.DirtBlock, 10);
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.Register();
+		}
+
+		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback){
+            if(velocity.X >= 0f){
+                position.X = position.X + 14f;
+            }
+            else{
+                position.X = position.X - 14f;
+            }
+            position.Y = position.Y - 15f;
+            player.eyeHelper.BlinkBecausePlayerGotHurt();
+            Projectile.NewProjectileDirect(source, position, velocity, type, damage, 0f, player.whoAmI);
+            return false;
 		}
 	}
 }
