@@ -6,10 +6,10 @@ using Terraria.ModLoader;
 
 namespace ATB.Items
 {
-	public class StarFleetHandAxe : ModItem
+	public class TholianShockwaveSpear : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("St.");
+			Tooltip.SetDefault("Fires a sonic blast.");
             DisplayName.SetDefault("Tholian Shockwave Spear");
 		}
 
