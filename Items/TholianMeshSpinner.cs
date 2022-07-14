@@ -11,6 +11,8 @@ namespace ATB.Items
 
 	public class TholianMeshSpinner : ModProjectile
 	{
+		Vector2 preLoc = new Vector2(0,0);
+
 		public override void SetStaticDefaults() {
 			DisplayName.SetDefault("Mesh Spinner"); // Name of the Projectile. It can be appear in chat
 		}
@@ -33,9 +35,10 @@ namespace ATB.Items
 		public override void AI() {
             Projectile.velocity.X = Projectile.velocity.X * 0.96f;
             Projectile.velocity.Y = Projectile.velocity.Y * 0.96f;
-            if(Math.Abs(Projectile.velocity.X) < 0.01f && Math.Abs(Projectile.velocity.Y) < 0.01f){
-                // Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.MagicMirror, 0f, 0f, 150, Color.White, 1.1f);
+            if(Math.Abs(Projectile.position.X - preLoc.X) < 0.01f && Math.Abs(Projectile.position.Y - preLoc.Y) < 0.01f){
+             	Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.MagicMirror, 0f, 0f, 150, Color.White, 1.1f);
             }
+			preLoc = Projectile.position;
         }
 
 		public override bool OnTileCollide(Vector2 oldVelocity) {
