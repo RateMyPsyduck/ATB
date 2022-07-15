@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;   
 using System;
 using Terraria;
 using Terraria.Enums;
@@ -12,6 +13,9 @@ namespace ATB.Items
 	public class TholianMeshSpinner : ModProjectile
 	{
 		Vector2 preLoc = new Vector2(0,0);
+		List<Projectile> web = new List<Projectile>();
+		bool Linked = false;
+		int timer = 0;
 
 		public override void SetStaticDefaults() {
 			DisplayName.SetDefault("Mesh Spinner"); // Name of the Projectile. It can be appear in chat
@@ -33,11 +37,34 @@ namespace ATB.Items
 		}
 
 		public override void AI() {
+			timer++;
             Projectile.velocity.X = Projectile.velocity.X * 0.96f;
             Projectile.velocity.Y = Projectile.velocity.Y * 0.96f;
             if(Math.Abs(Projectile.position.X - preLoc.X) < 0.01f && Math.Abs(Projectile.position.Y - preLoc.Y) < 0.01f){
-             	Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.MagicMirror, 0f, 0f, 150, Color.White, 1.1f);
+             	// Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.MagicMirror, 0f, 0f, 150, Color.White, 1.1f);
+				// Main.NewText(Main.projectile[0].position.X.ToString());
+				if(Linked == false){
+					for(int i = 0; i < Main.projectile.Length; i++){
+						if(Main.projectile[i].type == Projectile.type && Main.projectile[i] != Projectile && Main.projectile[i].timeLeft > 10){
+							web.Add(Main.projectile[i]);
+						}
+					}
+					Main.NewText(web.Count.ToString());
+					Linked = true;
+				}
             }
+			if(timer % 10 == 0){
+				for(int o = 0; o < web.Count; o++){
+					if(web[o].timeLeft > 1){
+						Vector2 p = web[o].position - Projectile.position;
+						p.Normalize();
+						Projectile.NewProjectileDirect(null, Projectile.Center, p, 88, ModContent.ProjectileType<TholianWeb>(), 0f, Main.LocalPlayer.whoAmI);
+					}
+					else{
+						web.Remove(web[o]);
+					}
+				}
+			}
 			preLoc = Projectile.position;
         }
 
