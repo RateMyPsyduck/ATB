@@ -45,7 +45,7 @@ namespace ATB.Items
 				// Main.NewText(Main.projectile[0].position.X.ToString());
 				if(Linked == false){
 					for(int i = 0; i < Main.projectile.Length; i++){
-						if(Main.projectile[i].type == Projectile.type && Main.projectile[i] != Projectile && Main.projectile[i].timeLeft > 10){
+						if(Main.projectile[i].type == Projectile.type && Main.projectile[i] != Projectile && Main.projectile[i].timeLeft > 10 && web.Count < 2){
 							web.Add(Main.projectile[i]);
 						}
 					}
@@ -63,6 +63,9 @@ namespace ATB.Items
 					else{
 						web.Remove(web[o]);
 					}
+				}
+				if(web.Count == 0){
+					Linked = false;
 				}
 			}
 			preLoc = Projectile.position;
