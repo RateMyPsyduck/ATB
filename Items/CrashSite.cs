@@ -45,13 +45,53 @@ namespace ATB.Items
 				// WorldGen.worldSurfaceLow is actually the highest surface tile. In practice you might want to use WorldGen.rockLayer or other WorldGen values.
 				int y = Main.spawnTileY;
 
-                int SizeRandX = WorldGen.genRand.Next(50, 100);
-                int SizeRandY = WorldGen.genRand.Next(20, 30);
+                int SizeRandX = 20;
+                int SizeRandY = 50;
 
 				// Then, we call WorldGen.TileRunner with random "strength" and random "steps", as well as the Tile we wish to place.
 				// Feel free to experiment with strength and step to see the shape they generate.
 
-				WorldGen.TileRunner(x, y, SizeRandX, SizeRandY, -1);
+
+				WorldGen.KillWall(x, y + 1, false);
+				WorldGen.KillWall(x, y + 2, false);
+				WorldGen.KillWall(x, y + 3, false);
+				WorldGen.KillWall(x, y + 4, false);
+				WorldGen.KillWall(x - 1, y + 1, false);
+				WorldGen.KillWall(x - 1, y + 2, false);
+				WorldGen.KillWall(x - 1, y + 3, false);
+				WorldGen.KillWall(x - 1, y + 4, false);
+
+				WorldGen.KillWall(x + 1, y + 1, false);
+				WorldGen.KillWall(x + 1, y + 2, false);
+				WorldGen.KillWall(x + 1, y + 3, false);
+
+				WorldGen.KillWall(x - 2, y + 1, false);
+				WorldGen.KillWall(x - 2, y + 2, false);
+				WorldGen.KillWall(x - 2, y + 3, false);
+
+				WorldGen.KillWall(x - 3, y + 1, false);
+				WorldGen.KillWall(x - 3, y + 2, false);
+
+				WorldGen.KillWall(x + 2, y + 1, false);
+				WorldGen.KillWall(x + 2, y + 2, false);
+
+
+				WorldGen.TileRunner(x, y, SizeRandX, SizeRandY, -1, false);
+
+				for(int xt = x - 200; xt < x + 200; xt++){
+					for(int yt = y - 200; yt < y + 40; yt++){
+						if(Framing.GetTileSafely(xt, yt).TileType == 0 && Main.tile[xt, yt - 1] == null){
+							WorldGen.PlaceTile(xt, yt, 284);
+						}
+						if(Framing.GetTileSafely(xt, yt).TileType == 5){
+							WorldGen.KillTile(xt,yt,false);
+						}
+					}
+				}
+
+
+
+				WorldGen.PlaceTile(x,y, ModContent.TileType<ShuttleHead>());
 
 				// Alternately, we could check the tile already present in the coordinate we are interested.
 				// Wrapping WorldGen.TileRunner in the following condition would make the ore only generate in Snow.

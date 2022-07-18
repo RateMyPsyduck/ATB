@@ -171,6 +171,12 @@
             private void SaveClick(UIMouseEvent evt, UIElement listeningElement) {
                 Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeamLocations.Add(Main.LocalPlayer.BottomLeft);
                 Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeeamLocationPointer = Main.LocalPlayer.GetModPlayer<BeamPlayer>().BeamLocations.Count - 1;
+                if(Main.tile[(int)Main.LocalPlayer.position.X / 16, (int)Main.LocalPlayer.position.Y / 16] != null){
+                    Main.NewText(Main.tile[(int)Main.LocalPlayer.position.X /16, (int)Main.LocalPlayer.position.Y / 16].ToString());
+                }
+                else{
+                    Main.NewText("null");
+                }
                 freeDraw = true;
             }
 
