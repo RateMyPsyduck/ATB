@@ -60,6 +60,7 @@ namespace ATB.Items
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor){
         SpriteEffects spriteEffects = SpriteEffects.None;
+        NPC.rotation = NPC.velocity.X * 0.05f;
         if (NPC.spriteDirection == 1)
             {
                 spriteEffects = SpriteEffects.FlipHorizontally;
