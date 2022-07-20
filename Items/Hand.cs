@@ -29,7 +29,7 @@ namespace ATB.Items
 		public override void SetStaticDefaults() {
 			DisplayName.SetDefault("Apollo's Hand");
 
-			//Main.npcFrameCount[Type] = Main.npcFrameCount[1];
+			Main.npcFrameCount[Type] = Main.npcFrameCount[2];
 
 			NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { // Influences how the NPC looks in the Bestiary
 				Velocity = 1f // Draws the NPC in the bestiary as if its walking +1 tiles in the x direction
@@ -48,9 +48,10 @@ namespace ATB.Items
 			NPC.value = 60f;
 			NPC.knockBackResist = 0.5f;
 			NPC.aiStyle = 2; // Fighter AI, important to choose the aiStyle that matches the NPCID that we want to mimic
+            NPC.alpha = 70;
 
 			AIType = 2; // Use vanilla zombie's type when executing AI code. (This also means it will try to despawn during daytime)
-			//AnimationType = 1; // Use vanilla zombie's type when executing animation code. Important to also match Main.npcFrameCount[NPC.type] in SetStaticDefaults.
+			AnimationType = 2; // Use vanilla zombie's type when executing animation code. Important to also match Main.npcFrameCount[NPC.type] in SetStaticDefaults.
 			//SpawnModBiomes = new int[1] { ModContent.GetInstance<ExampleSurfaceBiome>().Type }; // Associates this NPC with the ExampleSurfaceBiome in Bestiary
 		}
 
