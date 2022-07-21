@@ -38,7 +38,7 @@ namespace ATB.Items
 		}
 
 		public override void SetDefaults() {
-			NPC.width = 64;
+			NPC.width = 58;
 			NPC.height = 45;
 			NPC.damage = 100;
 			NPC.defense = 5;
@@ -47,10 +47,12 @@ namespace ATB.Items
 			NPC.DeathSound = SoundID.NPCDeath2;
 			NPC.value = 60f;
 			NPC.knockBackResist = 0.5f;
-			NPC.aiStyle = 2; // Fighter AI, important to choose the aiStyle that matches the NPCID that we want to mimic
+			NPC.aiStyle = -1; // Fighter AI, important to choose the aiStyle that matches the NPCID that we want to mimic
             NPC.alpha = 70;
+            NPC.stepSpeed = 10f;
+            NPC.dripping = false;
 
-			AIType = 2; // Use vanilla zombie's type when executing AI code. (This also means it will try to despawn during daytime)
+			AIType = -1; // Use vanilla zombie's type when executing AI code. (This also means it will try to despawn during daytime)
 			AnimationType = 2; // Use vanilla zombie's type when executing animation code. Important to also match Main.npcFrameCount[NPC.type] in SetStaticDefaults.
 			//SpawnModBiomes = new int[1] { ModContent.GetInstance<ExampleSurfaceBiome>().Type }; // Associates this NPC with the ExampleSurfaceBiome in Bestiary
 		}
@@ -61,7 +63,7 @@ namespace ATB.Items
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor){
         SpriteEffects spriteEffects = SpriteEffects.None;
-        NPC.rotation = NPC.velocity.X * 0.05f;
+        NPC.rotation = NPC.velocity.X * 0.1f;
         if (NPC.spriteDirection == 1)
             {
                 spriteEffects = SpriteEffects.FlipHorizontally;
@@ -69,9 +71,76 @@ namespace ATB.Items
             return true;
         }
 
-		private void Visuals() {
-			// So it will lean slightly towards the direction it's moving
-			NPC.rotation = NPC.velocity.X * 0.05f;	
+		public override void AI() {
+            Player target = null;
+            bool foundTarget = false;
+            for(int i = 0; i < Main.player.Length; i++){
+                if(target == null || (NPC.position - Main.player[i].Center).Length() < (NPC.position - target.Center).Length()){
+			        target = Main.player[i];
+                    foundTarget = true;
+                }
+            }
+
+			GeneralBehavior(target, out Vector2 vectorToPosition, out float distanceToPosition);
+			Movement(foundTarget, target, distanceToPosition, vectorToPosition);
 		}
+
+
+		private void GeneralBehavior(Player target, out Vector2 vectorToPosition, out float distanceToPosition) {
+			Vector2 PlayerPosition = target.Center;
+			//idlePosition.Y -= 200f; // Go up 48 coordinates (three tiles from the center of the player)
+
+			// Teleport to player if distance is too big
+			vectorToPosition = PlayerPosition - NPC.Center;
+			distanceToPosition = vectorToPosition.Length();
+
+			// if (Main.myPlayer == owner.whoAmI && distanceToIdlePosition > 2000f) {
+			// 	// Whenever you deal with non-regular events that change the behavior or position drastically, make sure to only run the code on the owner of the projectile,
+			// 	// and then set netUpdate to true
+			// 	Projectile.position = idlePosition;
+			// 	Projectile.velocity *= 0.1f;
+			// 	Projectile.netUpdate = true;
+			// }
+
+			// If your minion is flying, you want to do this independently of any conditions
+		}
+
+		private void Movement(bool foundTarget, Player Target, float distanceToPosition, Vector2 vectorToPosition) {
+			// Default movement parameters (here for attacking)
+			float speed = 8f;
+			float inertia = 20f;
+
+			if (foundTarget) {
+				// Minion has a target: attack (here, fly towards the enemy)
+				if (distanceToPosition > 40f) {
+					// The immediate range around the target (so it doesn't latch onto it when close)
+                    if(Target.Center.X < NPC.Center.X){
+                        NPC.spriteDirection = -1;
+                    }
+                    else{
+                        NPC.spriteDirection = 1;
+                    }
+					Vector2 direction = Target.Center - NPC.Center;
+					direction.Normalize();
+					direction *= speed;
+                    
+                    Vector2 s = (vectorToPosition * (inertia - 1) + direction) / inertia;
+                    s.Normalize();
+                    s *= speed;
+					NPC.SimpleFlyMovement(s, 1f);
+						// if ((targetCenter.X - Projectile.Center).X > 0f) {
+						// 	projectile.spriteDirection = projectile.direction = -1;
+						// }
+						// else if ((targetPos - projectile.Center).X < 0f) {
+						// 	projectile.spriteDirection = projectile.direction = 1;
+						// }
+				}
+			}
+			else {
+				// Minion doesn't have a target: return to player and idle
+                return;
+			}
+		}
+
     }
 }
