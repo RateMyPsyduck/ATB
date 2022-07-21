@@ -26,6 +26,8 @@ namespace ATB.Items
 	// Party Zombie is a pretty basic clone of a vanilla NPC. To learn how to further adapt vanilla NPC behaviors, see https://github.com/tModLoader/tModLoader/wiki/Advanced-Vanilla-Code-Adaption#example-npc-npc-clone-with-modified-projectile-hoplite
 	public class Hand : ModNPC
 	{
+        float speed = 3f;
+        int timer = 0;
 		public override void SetStaticDefaults() {
 			DisplayName.SetDefault("Apollo's Hand");
 
@@ -38,6 +40,7 @@ namespace ATB.Items
 		}
 
 		public override void SetDefaults() {
+            NPC.scale = 2f;
 			NPC.width = 58;
 			NPC.height = 45;
 			NPC.damage = 100;
@@ -51,6 +54,9 @@ namespace ATB.Items
             NPC.alpha = 70;
             NPC.stepSpeed = 10f;
             NPC.dripping = false;
+            NPC.noTileCollide = true;
+            NPC.noGravity = true;
+
 
 			AIType = -1; // Use vanilla zombie's type when executing AI code. (This also means it will try to despawn during daytime)
 			AnimationType = 2; // Use vanilla zombie's type when executing animation code. Important to also match Main.npcFrameCount[NPC.type] in SetStaticDefaults.
@@ -107,7 +113,13 @@ namespace ATB.Items
 
 		private void Movement(bool foundTarget, Player Target, float distanceToPosition, Vector2 vectorToPosition) {
 			// Default movement parameters (here for attacking)
-			float speed = 8f;
+            timer++;
+            if(distanceToPosition > 100){
+                speed = 10f;
+            }
+            else{
+                speed = 5f;
+            }
 			float inertia = 20f;
 
 			if (foundTarget) {
@@ -127,7 +139,9 @@ namespace ATB.Items
                     Vector2 s = (vectorToPosition * (inertia - 1) + direction) / inertia;
                     s.Normalize();
                     s *= speed;
-					NPC.SimpleFlyMovement(s, 1f);
+                    if(timer % 5 == 0){
+					    NPC.SimpleFlyMovement(s, 1f);
+                    }
 						// if ((targetCenter.X - Projectile.Center).X > 0f) {
 						// 	projectile.spriteDirection = projectile.direction = -1;
 						// }
