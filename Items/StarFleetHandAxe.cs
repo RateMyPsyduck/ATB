@@ -31,5 +31,12 @@ namespace ATB.Items
 
 			Item.axe = 30; 
 		}
+
+		public override void AddRecipes()
+		{
+			Recipe recipe = CreateRecipe();
+			recipe.AddTile<Items.replicator>();
+			recipe.Register();
+		}
 	}
 }

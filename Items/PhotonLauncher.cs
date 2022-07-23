@@ -54,8 +54,7 @@ namespace ATB.Items
 		public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ItemID.DirtBlock, 10);
-			recipe.AddTile(TileID.WorkBenches);
+			recipe.AddTile<Items.replicator>();
 			recipe.Register();
 		}
 

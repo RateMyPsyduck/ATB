@@ -27,11 +27,37 @@ namespace ATB.Items
 	public class Hand : ModNPC
 	{
         float speed = 3f;
-        int timer = 0;
+		static Random random = new Random();
+		int randomAttack = random.Next(6) + 6;
+		int GroundPoundTimer = 0;
+		int GroundPoundAttacks = 3;
+
+		public Vector2 GroundPoundLoc = new Vector2(0,0);
+
+		public Vector2 FirstStageDestination {
+			get => new Vector2(NPC.ai[1], NPC.ai[2]);
+			set {
+				NPC.ai[1] = value.X;
+				NPC.ai[2] = value.Y;
+			}
+		}
+
+		public Vector2 GroundPoundDestination {
+			get => new Vector2(NPC.ai[1], NPC.ai[2]);
+			set {
+				NPC.ai[1] = value.X;
+				NPC.ai[2] = value.Y;
+			}
+		}
+
+		public Vector2 LastFirstStageDestination { get; set; } = Vector2.Zero;
+		public Vector2 LastGroundPoundDestination { get; set; } = Vector2.Zero;
+		public ref float FirstStageTimer => ref NPC.localAI[1];
+		private const int FirstStageTimerMax = 75;
 		public override void SetStaticDefaults() {
 			DisplayName.SetDefault("Apollo's Hand");
 
-			Main.npcFrameCount[Type] = Main.npcFrameCount[2];
+			Main.npcFrameCount[Type] = Main.npcFrameCount[3];
 
 			NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { // Influences how the NPC looks in the Bestiary
 				Velocity = 1f // Draws the NPC in the bestiary as if its walking +1 tiles in the x direction
@@ -43,7 +69,7 @@ namespace ATB.Items
             NPC.scale = 2f;
 			NPC.width = 58;
 			NPC.height = 45;
-			NPC.damage = 100;
+			NPC.damage = 55;
 			NPC.defense = 5;
 			NPC.lifeMax = 600;
 			NPC.HitSound = SoundID.NPCHit1;
@@ -78,83 +104,131 @@ namespace ATB.Items
         }
 
 		public override void AI() {
-            Player target = null;
-            bool foundTarget = false;
-            for(int i = 0; i < Main.player.Length; i++){
-                if(target == null || (NPC.position - Main.player[i].Center).Length() < (NPC.position - target.Center).Length()){
-			        target = Main.player[i];
-                    foundTarget = true;
-                }
-            }
+			if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active) {
+				NPC.TargetClosest();
+			}
 
-			GeneralBehavior(target, out Vector2 vectorToPosition, out float distanceToPosition);
-			Movement(foundTarget, target, distanceToPosition, vectorToPosition);
+			Player player = Main.player[NPC.target];
+
+			if (player.dead) {
+				// If the targeted player is dead, flee
+				NPC.velocity.Y -= 0.04f;
+				// This method makes it so when the boss is in "despawn range" (outside of the screen), it despawns in 10 ticks
+				NPC.EncourageDespawn(10);
+				return;
+			}
+
+			if(randomAttack == 0){
+				GroundPound(player);
+			}
+			else{
+				DoFirstStage(player);
+			}
 		}
 
+	private void DoFirstStage(Player player) {
+			// Each time the timer is 0, pick a random position a fixed distance away from the player but towards the opposite side
+			// The NPC moves directly towards it with fixed speed, while displaying its trajectory as a telegraph
 
-		private void GeneralBehavior(Player target, out Vector2 vectorToPosition, out float distanceToPosition) {
-			Vector2 PlayerPosition = target.Center;
-			//idlePosition.Y -= 200f; // Go up 48 coordinates (three tiles from the center of the player)
+			FirstStageTimer++;
+			if (FirstStageTimer > FirstStageTimerMax) {
+				FirstStageTimer = 0;
+			}
 
-			// Teleport to player if distance is too big
-			vectorToPosition = PlayerPosition - NPC.Center;
-			distanceToPosition = vectorToPosition.Length();
+			float distance = 200; // Distance in pixels behind the player
 
-			// if (Main.myPlayer == owner.whoAmI && distanceToIdlePosition > 2000f) {
-			// 	// Whenever you deal with non-regular events that change the behavior or position drastically, make sure to only run the code on the owner of the projectile,
-			// 	// and then set netUpdate to true
-			// 	Projectile.position = idlePosition;
-			// 	Projectile.velocity *= 0.1f;
-			// 	Projectile.netUpdate = true;
-			// }
+			if (FirstStageTimer == 0) {
+				Vector2 fromPlayer = NPC.Center - player.Center;
 
-			// If your minion is flying, you want to do this independently of any conditions
-		}
+				if (Main.netMode != NetmodeID.MultiplayerClient) {
+					// Important multiplayer concideration: drastic change in behavior (that is also decided by randomness) like this requires
+					// to be executed on the server (or singleplayer) to keep the boss in sync
+					randomAttack--;
 
-		private void Movement(bool foundTarget, Player Target, float distanceToPosition, Vector2 vectorToPosition) {
-			// Default movement parameters (here for attacking)
-            timer++;
-            if(distanceToPosition > 100){
-                speed = 10f;
-            }
-            else{
-                speed = 5f;
-            }
-			float inertia = 20f;
+					float angle = fromPlayer.ToRotation();
+					float twelfth = MathHelper.Pi / 6;
 
-			if (foundTarget) {
-				// Minion has a target: attack (here, fly towards the enemy)
-				if (distanceToPosition > 40f) {
-					// The immediate range around the target (so it doesn't latch onto it when close)
-                    if(Target.Center.X < NPC.Center.X){
-                        NPC.spriteDirection = -1;
-                    }
-                    else{
-                        NPC.spriteDirection = 1;
-                    }
-					Vector2 direction = Target.Center - NPC.Center;
-					direction.Normalize();
-					direction *= speed;
-                    
-                    Vector2 s = (vectorToPosition * (inertia - 1) + direction) / inertia;
-                    s.Normalize();
-                    s *= speed;
-                    if(timer % 5 == 0){
-					    NPC.SimpleFlyMovement(s, 1f);
-                    }
-						// if ((targetCenter.X - Projectile.Center).X > 0f) {
-						// 	projectile.spriteDirection = projectile.direction = -1;
-						// }
-						// else if ((targetPos - projectile.Center).X < 0f) {
-						// 	projectile.spriteDirection = projectile.direction = 1;
-						// }
+					angle += MathHelper.Pi + Main.rand.NextFloat(-twelfth, twelfth);
+					if (angle > MathHelper.TwoPi) {
+						angle -= MathHelper.TwoPi;
+					}
+					else if (angle < 0) {
+						angle += MathHelper.TwoPi;
+					}
+
+					Vector2 relativeDestination = angle.ToRotationVector2() * distance;
+
+					FirstStageDestination = player.Center + relativeDestination;
+					FirstStageDestination = FirstStageDestination - new Vector2(10, 10);
+					NPC.netUpdate = true;
 				}
 			}
-			else {
-				// Minion doesn't have a target: return to player and idle
-                return;
+
+			// Move along the vector
+			Vector2 toDestination = FirstStageDestination - NPC.Center;
+			Vector2 toDestinationNormalized = toDestination.SafeNormalize(Vector2.UnitY);
+			float speed = Math.Min(distance, toDestination.Length());
+			NPC.velocity = toDestinationNormalized * speed / 23;
+
+			if (FirstStageDestination != LastFirstStageDestination) {
+				// If destination changed
+				NPC.TargetClosest(); // Pick the closest player target again
+
+				// "Why is this not in the same code that sets FirstStageDestination?" Because in multiplayer it's ran by the server.
+				// The client has to know when the destination changes a different way. Keeping track of the previous ticks' destination is one way
+				if (Main.netMode != NetmodeID.Server) {
+					// For visuals regarding NPC position, netOffset has to be concidered to make visuals align properly
+					NPC.position += NPC.netOffset;
+
+					NPC.position -= NPC.netOffset;
+				}
+			}
+			LastFirstStageDestination = FirstStageDestination;
+
+			// No damage during first phase
+
+			// Fade in based on remaining total minion life
+
+			NPC.rotation = NPC.velocity.ToRotation() - MathHelper.PiOver2;
+		}
+
+	public void GroundPound(Player player){
+		if(GroundPoundTimer == 0){
+			// GroundPoundLoc = (player.Center - new Vector2(0, 100));
+			NPC.velocity = new Vector2(0,0);
+			Vector2 fromPlayer = NPC.Center - (player.Center);
+			if (Main.netMode != NetmodeID.MultiplayerClient) {
+				GroundPoundAttacks--;
+
+				float angle = fromPlayer.ToRotation();
+				float twelfth = MathHelper.Pi / 6;
+
+				angle += MathHelper.Pi + Main.rand.NextFloat(-twelfth, twelfth);
+				if (angle > MathHelper.TwoPi) {
+					angle -= MathHelper.TwoPi;
+				}
+				else if (angle < 0) {
+					angle += MathHelper.TwoPi;
+				}
+
+				Vector2 relativeDestination = angle.ToRotationVector2() * 200;
+
+				GroundPoundDestination = (player.Center - new Vector2(0, 100)) + relativeDestination;
+				NPC.netUpdate = true;
 			}
 		}
+		NPC.position = (player.position - new Vector2((NPC.width / 2), 250));
+		GroundPoundTimer++;
+		if(GroundPoundTimer % 60 == 0){
+			Main.NewText("Ground Pounding!");
+		}
+		if(GroundPoundTimer > 180){
+			GroundPoundTimer = 0;
+			GroundPoundAttacks = 3;
+			FirstStageTimer = 0;
+			randomAttack = random.Next(6) + 6;
+		}
+	}
 
     }
 }
