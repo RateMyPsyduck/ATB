@@ -37,7 +37,7 @@ namespace ATB
 			//TextureAssets.Background[21] = ModContent.Request<Texture2D>($"ATB/Items/GornBackground");
 			//TextureAssets.Background[108] = ModContent.Request<Texture2D>($"ATB/Items/GornBackground", (AssetRequestMode)2);
 			 //TextureAssets.Background[207] = ModContent.Request<Texture2D>($"ATB/Items/GornBackground",  (AssetRequestMode)2);
-			TextureAssets.Background[217] = ModContent.Request<Texture2D>($"ATB/Items/GornBackground", (AssetRequestMode)2);
+			//TextureAssets.Background[217] = ModContent.Request<Texture2D>($"ATB/Items/GornBackground", (AssetRequestMode)2);
 			// TextureAssets.Background[248] = ModContent.Request<Texture2D>($"ATB/Items/GornBackground");
 		}
 
