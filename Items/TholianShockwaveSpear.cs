@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.GameContent.Creative;
 using Terraria.ModLoader;
+using Terraria.Audio;
 
 namespace ATB.Items
 {
@@ -24,7 +25,11 @@ namespace ATB.Items
 			Item.knockBack = 6;
 			Item.value = 100;
 			Item.rare = ItemRarityID.Green;
-			Item.UseSound = SoundID.Item1;
+			Item.UseSound = new SoundStyle($"{nameof(ATB)}/Items/TholianShockwaveSpearSound") {
+				Volume = 0.5f,
+				PitchVariance = 1f,
+				MaxInstances = 1,
+			};
 			Item.DamageType = DamageClass.MeleeNoSpeed;
 			Item.autoReuse = true;
 			Item.noUseGraphic = true; // The sword is actually a "projectile", so the item should not be visible when used
