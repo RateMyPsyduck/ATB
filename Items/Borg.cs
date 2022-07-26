@@ -78,9 +78,9 @@ namespace ATB.Items
 			npcLoot.Add(ItemDropRule.Common(1346, 1)); // 1% chance to drop Confetti
 		}
 
-		public override float SpawnChance(NPCSpawnInfo spawnInfo) {
-			return SpawnCondition.OverworldNightMonster.Chance * 0.2f; // Spawn with 1/5th the chance of a regular zombie.
-		}
+		// public override float SpawnChance(NPCSpawnInfo spawnInfo) {
+		// 	return SpawnCondition.OverworldNightMonster.Chance * 0.2f; // Spawn with 1/5th the chance of a regular zombie.
+		// }
 
 		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
 			// We can use AddRange instead of calling Add multiple times in order to add multiple items at once

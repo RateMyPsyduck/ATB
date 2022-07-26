@@ -37,7 +37,6 @@ namespace ATB.Items
 			Item.width = 50;
 			Item.height = 18;
 			Item.useTime = 20;
-			Item.UseSound = SoundID.Item13;
 			Item.useStyle = 5;
 			Item.shootSpeed = 12f;
             Item.consumable = true;

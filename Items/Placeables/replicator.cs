@@ -1,6 +1,18 @@
+using Microsoft.Xna.Framework;
+using System.Collections.Generic;
+using Terraria;
 using Terraria.ID;
 using Terraria.GameContent.Creative;
 using Terraria.ModLoader;
+using Terraria.Audio;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.GameContent;
+using Terraria.GameInput;
+using Terraria.Map;
+using Terraria.DataStructures;
+using System;
+using System.Windows.Input;
 
 namespace ATB.Items.Placeables
 {
@@ -27,6 +39,18 @@ namespace ATB.Items.Placeables
 			Item.maxStack = 99;
 			Item.consumable = true;
 			Item.value = 150;
+		}
+
+		public override void AddRecipes()
+		{
+			Recipe recipe = CreateRecipe();
+			recipe.AddIngredient(ItemID.IronBar, 10);
+			recipe.AddTile(TileID.WorkBenches);
+			recipe.Register();
+			Recipe recipe2 = CreateRecipe();
+			recipe2.AddIngredient(ItemID.LeadBar, 10);
+			recipe2.AddTile(TileID.WorkBenches);
+			recipe2.Register();
 		}
 
 		// Please see Content/ExampleRecipes.cs for a detailed explanation of recipe creation.
