@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.IO;
@@ -41,6 +42,9 @@ namespace ATB.Items
 				// The inside of this for loop corresponds to one single splotch of our Ore.
 				// First, we randomly choose any coordinate in the world by choosing a random x and y value.
 				int x = WorldGen.genRand.Next(Main.spawnTileX - 70, Main.spawnTileX + 70);
+				while(Math.Abs(x - Main.spawnTileX) < 20){
+					x = WorldGen.genRand.Next(Main.spawnTileX - 70, Main.spawnTileX + 70);
+				}
 
 				// WorldGen.worldSurfaceLow is actually the highest surface tile. In practice you might want to use WorldGen.rockLayer or other WorldGen values.
 				int y = Main.spawnTileY;
@@ -76,22 +80,24 @@ namespace ATB.Items
 				WorldGen.KillWall(x + 2, y + 2, false);
 
 
-				WorldGen.TileRunner(x, y, SizeRandX, SizeRandY, -1, false);
+				//WorldGen.TileRunner(x, y, SizeRandX, SizeRandY, -1, false);
 
-				for(int xt = x - 200; xt < x + 200; xt++){
-					for(int yt = y - 200; yt < y + 40; yt++){
-						if(Framing.GetTileSafely(xt, yt).TileType == 0 && Main.tile[xt, yt - 1] == null){
-							WorldGen.PlaceTile(xt, yt, 284);
-						}
-						if(Framing.GetTileSafely(xt, yt).TileType == 5){
-							WorldGen.KillTile(xt,yt,false);
-						}
-					}
-				}
+				circle(x, y + 10);
+
+				// for(int xt = x - 20; xt < x + 20; xt++){
+				// 	for(int yt = y - 20; yt < y + 20; yt++){
+				// 		if((Framing.GetTileSafely(xt, yt).HasTile == true && Framing.GetTileSafely(xt, yt).TileType == 0) && Framing.GetTileSafely(xt, yt - 1).HasTile == false){
+				// 			WorldGen.PlaceTile(xt, yt -1, 284);
+				// 		}
+				// 		if(Framing.GetTileSafely(xt, yt).TileType == 5){
+				// 			WorldGen.KillTile(xt,yt,false);
+				// 		}
+				// 	}
+				// }
 
 
 
-				WorldGen.PlaceTile(x,y, ModContent.TileType<ShuttleHead>());
+				WorldGen.PlaceTile(x,y, ModContent.TileType<Items.replicator>());
 
 				// Alternately, we could check the tile already present in the coordinate we are interested.
 				// Wrapping WorldGen.TileRunner in the following condition would make the ore only generate in Snow.
@@ -100,6 +106,32 @@ namespace ATB.Items
 				// {
 				// 	WorldGen.TileRunner(.....);
 				// }
+		}
+
+		private void circle(int xx, int yy){  
+
+			double radius = 5;
+			int j = 0;
+			for (j = 0; j <= 10; j++)
+			{
+
+					radius = j + 1;
+					for (double i = 0.0; i < 360.0; i += 0.1)
+					{
+						double angle = i * System.Math.PI / 180;
+						int x = (int)(5 - radius * System.Math.Cos(angle));
+						int y = (int)(5 - radius * System.Math.Sin(angle));
+						WorldGen.KillTile(x + xx,y + yy - 18, false);
+					}
+			}
+			for (int p = 0; p < 21; p++){
+				for(int l = yy; l < 0; l--){
+					WorldGen.KillTile(p + xx, l, false);
+				}
+			}
+			WorldGen.PlaceTile(xx + 5, yy - 2, (Framing.GetTileSafely(xx - 1, yy).TileType));
+			//WorldGen.PlaceTile(xx + 5, yy - 1, ModContent.TileType<replicator>());
+			WorldGen.PlaceTile(xx + 5, yy - 3, ModContent.TileType<ShuttleHead>());
 		}
 	}
 }
