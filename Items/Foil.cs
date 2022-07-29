@@ -22,27 +22,29 @@ namespace ATB.Items
 			Item.rare = ItemRarityID.Pink;
 			Item.width = 46;
 			Item.height = 46;
-			Item.useTime = 12;
+			Item.useTime = 13;
 			Item.UseSound = SoundID.Item1;
 			Item.useStyle = ItemUseStyleID.Swing;
 			Item.shootSpeed = 6f;
-			Item.useAnimation = 12;
+			Item.useAnimation = 13;
 			Item.value = Item.sellPrice(silver: 3);
 			Item.scale = 1f;
+			Item.holdStyle = 1;
 		}
 
-        // public override bool? UseItem(Player player) {
-        //     if(useMode == false){
-        //         timesUsed++;
-        //         Main.NewText(timesUsed.ToString());
-        //         if(timesUsed % 2 == 0){
-        //             return false;
-        //         }
-        //         return null;
-        //     }
-        //     useMode == true;
-        //     return false;
-        // }
+        public override bool? UseItem(Player player) {
+			timesUsed++;
+			if(timesUsed % 2 == 0){
+				Item.useStyle = 1;
+			}
+			else
+			{
+				Main.NewText("HERE");
+				Item.useStyle = 3;
+				player.ApplyItemAnimation(ModContent.ItemType<CapShield>());
+			}
+            return true;
+        }
 
 		public override Vector2? HoldoutOffset()
         {
@@ -52,5 +54,11 @@ namespace ATB.Items
 			return g;
 
         }
+
+
+        public override void HoldStyle(Player player, Rectangle heldItemFrame)
+		{
+			player.itemLocation = player.Center + new Vector2((6 * player.direction), + 6);
+		}
 	}
 }
