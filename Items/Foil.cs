@@ -22,39 +22,39 @@ namespace ATB.Items
 			Item.rare = ItemRarityID.Pink;
 			Item.width = 46;
 			Item.height = 46;
-			Item.useTime = 13;
+			Item.useTime = 14;
 			Item.UseSound = SoundID.Item1;
-			Item.useStyle = ItemUseStyleID.Swing;
+			Item.useStyle = 3;
 			Item.shootSpeed = 6f;
-			Item.useAnimation = 13;
+			Item.useAnimation = 14;
 			Item.value = Item.sellPrice(silver: 3);
 			Item.scale = 1f;
 			Item.holdStyle = 1;
 		}
 
         public override bool? UseItem(Player player) {
-			timesUsed++;
 			if(timesUsed % 2 == 0){
 				Item.useStyle = 1;
 			}
 			else
 			{
-				Main.NewText("HERE");
+				Vector2 jump = new Vector2(0,0);
+				jump.X = player.direction * 5;
+				jump.Y = 0;
+				player.velocity = jump;
+				player.immune = true;
+				player.immuneTime = 18;
+				player.immuneAlpha = 0;
+				player.immuneNoBlink = true;
 				Item.useStyle = 3;
-				player.ApplyItemAnimation(ModContent.ItemType<CapShield>());
 			}
             return true;
         }
 
-		public override Vector2? HoldoutOffset()
-        {
-			Vector2 g;
-            g.Y = -1;
-            g.X = -3.5f;
-			return g;
-
-        }
-
+		public override bool CanUseItem(Player player){
+			timesUsed++;
+			return true;
+		}
 
         public override void HoldStyle(Player player, Rectangle heldItemFrame)
 		{
