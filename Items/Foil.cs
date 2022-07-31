@@ -22,11 +22,11 @@ namespace ATB.Items
 			Item.rare = ItemRarityID.Pink;
 			Item.width = 46;
 			Item.height = 46;
-			Item.useTime = 14;
+			Item.useTime = 12;
 			Item.UseSound = SoundID.Item1;
 			Item.useStyle = 3;
 			Item.shootSpeed = 6f;
-			Item.useAnimation = 14;
+			Item.useAnimation = 12;
 			Item.value = Item.sellPrice(silver: 3);
 			Item.scale = 1f;
 			Item.holdStyle = 1;
@@ -53,6 +53,7 @@ namespace ATB.Items
 
 		public override bool CanUseItem(Player player){
 			timesUsed++;
+			Item.useStyle = 3; //setting it twice hear fixes a vusual bug.
 			return true;
 		}
 
