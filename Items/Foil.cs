@@ -28,7 +28,7 @@ namespace ATB.Items
 			Item.shootSpeed = 6f;
 			Item.useAnimation = 12;
 			Item.value = Item.sellPrice(silver: 3);
-			Item.scale = 1f;
+			Item.scale = 0.8f;
 			Item.holdStyle = 1;
 		}
 
