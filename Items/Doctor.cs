@@ -5,6 +5,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using System.Collections.Generic;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
@@ -52,8 +53,8 @@ namespace ATB.Items
 
 		public override void SetDefaults() {
 			NPC.friendly = true; // NPC Will not attack player
-			NPC.width = 40;
-			NPC.height = 46;
+			NPC.width = 18;
+			NPC.height = 40;
 			// NPC.aiStyle = 7;
 			NPC.damage = 10;
 			NPC.defense = 15;
@@ -88,20 +89,23 @@ namespace ATB.Items
 
 		public override List<string> SetNPCNameList() {
 			return new List<string> {
-				"Doctor"
+				"EMH"
 			};
 		}
 
         public override bool PreDraw (SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor){
             if(NPC.spriteDirection == -1){
                 NPC.frameCounter = 0;
-                Main.NewText("LEFT");
             }
             else{
                 NPC.frameCounter = 1;
-                Main.NewText("RIGHT");
             }
+            NPC.frame.Y = 54 * (int)NPC.frameCounter;
             return true;
+        }
+
+		public override void ModifyNPCLoot(NPCLoot npcLoot) {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<MobileEmitter>(), 1));
         }
 
 		// public override float SpawnChance(NPCSpawnInfo spawnInfo) {
@@ -145,12 +149,8 @@ namespace ATB.Items
 			}
             else{
                 NPC.life = 0;
+                Item.NewItem(null, new Vector2(NPC.position.X, NPC.position.Y), ModContent.ItemType<MobileEmitter>(), 1, false, 0, false, false);
             }
-		}
-
-		public override void SetupShop(Chest shop, ref int nextSlot) {
-			shop.item[nextSlot].SetDefaults(ModContent.ItemType<Phaser>());
-			nextSlot++;
 		}
 
 		public override void TownNPCAttackStrength(ref int damage, ref float knockback) {
