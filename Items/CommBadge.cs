@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.GameInput;
 using Terraria.Map;
+using Terraria.ModLoader.IO;
 using Terraria.DataStructures;
 using System;
 using System.Windows.Input;
@@ -133,7 +134,7 @@ namespace ATB.Items
 		//UISystem ui = new UISystem();
 		UISystem ui = ModContent.GetInstance<UISystem>();
 
-		public List<Vector2> BeamLocations = new List<Vector2>();
+		public List<Vector2> BeamLocations;
 		public int BeeamLocationPointer = 0;
 
 		public Vector2 BeamLocation = new Vector2(1,1);
@@ -145,6 +146,18 @@ namespace ATB.Items
 		public bool CommBadgeOn;
 		public bool LightHat = false;
 		Random random = new Random();
+
+		public override void Initialize(){
+			BeamLocations = new List<Vector2>();
+		}
+
+		public override void SaveData(TagCompound tag){
+			tag["BeamLocations"] = BeamLocations;
+		}
+
+		public override void LoadData(TagCompound tag){
+			BeamLocations = (List<Vector2>)tag["BeamLocations"];
+		}
 
 
 		public override void ProcessTriggers(TriggersSet triggersSet)
