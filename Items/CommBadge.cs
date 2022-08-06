@@ -155,8 +155,8 @@ namespace ATB.Items
 			tag["BeamLocations"] = BeamLocations;
 		}
 
-		public override void LoadData(TagCompound tag){
-			BeamLocations = (List<Vector2>)tag["BeamLocations"];
+		public override void LoadData(TagCompound tag) {
+			BeamLocations = tag.Get<List<Vector2>>("BeamLocations");
 		}
 
 
