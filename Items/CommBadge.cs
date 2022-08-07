@@ -83,6 +83,13 @@ namespace ATB.Items
 			BeamLocations = tag.Get<List<Vector2>>("BeamLocations");
 		}
 
+		public override void OnEnterWorld(Player player){
+			for(int i = 0; i < BeamLocations.Count; i++){
+				player.Teleport((BeamLocation), -1);
+			}
+			player.Spawn(PlayerSpawnContext.SpawningIntoWorld);	
+		}
+
 
 		public override void ProcessTriggers(TriggersSet triggersSet)
 			{
