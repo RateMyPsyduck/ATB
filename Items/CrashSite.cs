@@ -25,6 +25,10 @@ namespace ATB.Items
 				tasks.Insert(ShiniesIndex - 1, new CrashSitePass("Crashing!", 2080f));
 			}
 		}
+
+		public override void PreUpdateWorld() {
+            // Main.NewText("Test");
+		}
 	}
 
 	public class CrashSitePass : GenPass
